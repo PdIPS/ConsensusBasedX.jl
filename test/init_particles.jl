@@ -1,52 +1,59 @@
 using CBX.LowLevel
 using Test
-using Distributions
+using Distributions, LinearAlgebra
+
+const D = 20;
+const N = 10;
+const M = 2;
+const target = (D, N, M);
+
+function test_init_particles_uniform()
+  config = (; D, N, M)
+  X = init_particles(config)
+  @test size(X) == target
+  @test minimum(X) >= -1
+  @test maximum(X) <= 1
+
+  config =
+    (; D, N, M, sampling = :uniform, sampling_x_min = -3, sampling_x_max = 3)
+  X = init_particles(config)
+  @test size(X) == target
+  @test minimum(X) >= -3
+  @test maximum(X) <= 3
+
+  config =
+    (; D, N, M, sampling = :uniform, sampling_x_min = 2, sampling_x_max = 3)
+  X = init_particles(config)
+  @test size(X) == target
+  @test minimum(X) >= 2
+  @test maximum(X) <= 3
+end
+
+function test_init_particles_normal()
+  config = (; D, N, M, sampling = :normal, sampling_μ = 1, sampling_σ = 2)
+  X = init_particles(config)
+  @test size(X) == target
+end
+
+function test_init_particles_dist()
+  distribution_scalar = Normal(1, 2)
+  @test size(init_particles((; D, N, M, dist = distribution_scalar))) == target
+
+  distribution_one_particle = MultivariateNormal(D, 2)
+  @test size(init_particles((; D, N, M, dist = distribution_one_particle))) ==
+        target
+
+  distribution_one_realisation =
+    MatrixNormal(zeros(D, N), Matrix(I, D, D), Matrix(I, N, N))
+  @test size(
+    init_particles((; D, N, M, dist = distribution_one_realisation)),
+  ) == target
+end
 
 function tests()
-  N, d = 10, 20
-  target = (d, N)
-
-  @testset "init_particles direct" begin
-    conf = config(; N, d)
-
-    distribution_scalar = Uniform()
-    @test size(init_particles(conf, distribution_scalar)) == target
-
-    distribution_one_particle =
-      product_distribution((distribution_scalar for _ in 1:d)...)
-    @test size(init_particles(conf, distribution_one_particle)) == target
-
-    distribution_one_dimension =
-      product_distribution((distribution_scalar for _ in 1:N)...)
-    @test size(init_particles(conf, distribution_one_dimension)) == target
-
-    distribution_state =
-      product_distribution((distribution_one_particle for _ in 1:N)...)
-    @test size(init_particles(conf, distribution_state)) == target
-
-    distribution_transposed =
-      product_distribution((distribution_one_dimension for _ in 1:d)...)
-    @test size(init_particles(conf, distribution_transposed)) == target
-  end
-
-  @testset "init_particles uniform" begin
-    conf =
-      config(sampling = :uniform, sampling_x_min = -3, sampling_x_max = 3; N, d)
-    @test size(init_particles(conf)) == target
-
-    conf = config(sampling = :uniform, sampling_μ = 1, sampling_σ = 2; N, d)
-    @test size(init_particles(conf)) == target
-  end
-
-  @testset "init_particles normal" begin
-    conf = config(sampling = :normal, sampling_μ = 1, sampling_σ = 2; N, d)
-    @test size(init_particles(conf)) == target
-  end
-
-  @testset "init_particles default" begin
-    conf = config(; N, d)
-    @test size(init_particles(conf)) == target
-  end
+  @testset "init_particles_uniform" test_init_particles_uniform()
+  @testset "init_particles_normal" test_init_particles_normal()
+  @testset "init_particles_dist" test_init_particles_dist()
 end
 
 tests()

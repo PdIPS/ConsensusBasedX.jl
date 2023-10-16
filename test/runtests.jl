@@ -1,9 +1,16 @@
+using Test
 using SafeTestsets
 
-@safetestset "init_particles" begin
-  include("init_particles.jl")
-end
+@testset "CBX.jl" begin
+  @safetestset "init_particles" begin
+    include("init_particles.jl")
+  end
 
-@safetestset "format" begin
-  include("format.jl")
+  @safetestset "Objectives" begin
+    include("Objectives.jl")
+  end
+
+  @safetestset "format" begin
+    include("format.jl")
+  end
 end

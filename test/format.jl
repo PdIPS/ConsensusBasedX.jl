@@ -15,15 +15,11 @@ function tests()
     whitespace_ops_in_indices = true,
     whitespace_typedefs = true,
   )
-  f("../src")
-  f("../test")
-  f("../experiments")
-  f("../src")
-  f("../test")
-  f("../experiments")
-  @test f("../src")
-  @test f("../test")
-  @test f("../experiments")
+  for dir in ["../src", "../test", "../experiments"]
+    f(dir)
+    f(dir)
+    @test f(dir)
+  end
 end
 
 if !Sys.iswindows()

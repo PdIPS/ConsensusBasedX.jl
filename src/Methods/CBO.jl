@@ -1,174 +1,200 @@
 const DEFAULT_CBO_CONFIG = (;
+  Δt = 0.1,
+  α = 1.0,
   λ = 1.0,
   σ = 1.0,
   ε = 1e-3,
-  correction = :Heaviside_reg,
-  energy_tol = 1e-5,
-  diff_tol = 1e-5,
+  correction = :Heaviside,
+  noise = :isotropic,
+  track_step = 1,
+  track_list = Symbol[],
 );
 
-mutable struct CBO{Tf, TH} <: Method
-  d::Int
+mutable struct CBO{T} <: CBXDynamic{T}
+  D::Int
   N::Int
+  M::Int
 
-  f::Tf
-  f_min::Float64
+  f::Objective
+  x::Array{Float64, 3}
+  x_old::Array{Float64, 3}
+
   t::Float64
-  T::Float64
   Δt::Float64
+  sqrt_Δt::Float64
+  it::Int
 
-  x::Matrix{Float64}
-  x_old::Matrix{Float64}
-  x_difference::Float64
-  dW::Matrix{Float64}
-  update::Matrix{Float64}
-
-  energy::Vector{Float64}
-  mean::Vector{Float64}
-  mean_difference::Matrix{Float64}
-  mean_energy::Float64
-
-  energy_tol::Float64
-  diff_tol::Float64
-
+  α::Float64
   λ::Float64
-  σ::Float64
+  σ::Real
+  ε::Real
+  correction::Function
+  noise::Function
 
-  H::TH
+  consensus::Matrix{Float64}
 
-  noise::Noise
-  scheduler::Scheduler
+  update_diff::Vector{Float64}
+
+  energy::Matrix{Float64}
+  consensus_energy::Vector{Float64}
+  best_cur_energy::Vector{Float64}
+  best_energy::Vector{Float64}
+
+  f_min::Vector{Float64}
+  f_min_idx::Vector{Int}
+  num_f_eval::Int
+
+  best_cur_particle::Matrix{Float64}
+  best_particle::Matrix{Float64}
+
+  track_step::Int
+  track_list::Vector{Symbol}
+  track::T
+  track_functions::Vector{Function}
 end
-export CBO;
 
-function CBO(
+@config CBO(f) = CBO(config, f, init_particles(config));
+
+@config DEFAULT_CBO_CONFIG function CBO(
   f,
-  x,
-  noise,
-  scheduler;
-  d,
-  N,
-  T,
-  Δt,
-  energy_tol,
-  diff_tol,
-  λ,
-  σ,
-  ε,
-  correction,
-  args...,
+  x;
+  Δt::Real,
+  α::Real,
+  λ::Real,
+  σ::Real,
+  ε::Real,
+  correction::Symbol,
+  noise::Symbol,
+  track_step::Int,
+  track_list::Vector{Symbol},
 )
-  if correction == :Heaviside ||
-     correction == :Heaviside_reg ||
-     correction == :identity
-    val = Val(correction)
-  else
-    throw(
-      ArgumentError(
-        "The specified correction function is nor valid. Please use a :Heaviside, :Heaviside_reg, or :identity.",
-      ),
-    )
-  end
-  H(s::Real) = CBO_H(val, s, ε)
+  D, N, M = config.D, config.N, config.M
 
-  f_min = Inf
-  t = 0.0
+  x = copy(x)
   x_old = copy(x)
-  x_difference = Inf
-  dW = zeros(d, N)
-  update = zeros(d, N)
 
-  energy = zeros(N)
-  mean = zeros(d)
-  mean_difference = zeros(d, N)
-  mean_energy = Inf
+  t = 0.0
+  sqrt_Δt = sqrt(Δt)
+  it = 0
+
+  correction_dict = Dict(
+    :identity => corr_identity,
+    :Heaviside => corr_Heaviside,
+    :Heaviside_reg => corr_Heaviside_reg,
+  )
+  correction_method = correction_dict[correction]
+
+  noise_dict =
+    Dict(:isotropic => noise_isotropic, :anisotropic => noise_isotropic)
+  noise_method = noise_dict[noise]
+
+  consensus = zeros(D, M)
+
+  update_diff = [Inf for m in 1:M]
+
+  energy = [Inf for n in 1:N, m in 1:M]
+  consensus_energy = [Inf for m in 1:M]
+  best_cur_energy = zeros(M)
+  best_energy = [Inf for m in 1:M]
+
+  f_min = [Inf for m in 1:M]
+  f_min_idx = [1 for m in 1:M]
+  num_f_eval = 0
+
+  best_cur_particle = zeros(D, M)
+  best_particle = zeros(D, M)
+
+  track, track_functions = init_track(track_list)
 
   return CBO(
-    d,
+    D,
     N,
+    M,
     f,
-    f_min,
-    t,
-    1.0 * T,
-    1.0 * Δt,
     x,
     x_old,
-    x_difference,
-    dW,
-    update,
+    t,
+    Δt,
+    sqrt_Δt,
+    it,
+    α,
+    λ,
+    σ,
+    ε,
+    correction_method,
+    noise_method,
+    consensus,
+    update_diff,
     energy,
-    mean,
-    mean_difference,
-    mean_energy,
-    energy_tol,
-    diff_tol,
-    1.0 * λ,
-    1.0 * σ,
-    H,
-    noise,
-    scheduler,
+    consensus_energy,
+    best_cur_energy,
+    best_energy,
+    f_min,
+    f_min_idx,
+    num_f_eval,
+    best_cur_particle,
+    best_particle,
+    track_step,
+    track_list,
+    track,
+    track_functions,
   )
 end
-@splat_conf CBO DEFAULT_CBO_CONFIG f x noise scheduler
 
-CBO_H(v::Val{:Heaviside}, s, ε) = Heaviside(s);
-CBO_H(v::Val{:Heaviside_reg}, s, ε) = Heaviside_reg(s, ε);
-CBO_H(v::Val{:identity}, s, ε) = s;
+export CBO;
 
-function step!(method::CBO)
-  ###TODO: batches
-  update_mean!(method)
-  copyto!(method.x_old, method.x)
-  method.noise(method)
+corr_identity(method, s::Real) = s;
+corr_Heaviside(method, s::Real) = 1.0 * (s > 0);
+corr_Heaviside_reg(method, s::Real) = (1 + tanh(s / method.ε)) / 2;
 
-  @. method.update =
-    method.λ *
-    method.mean_difference *
-    method.H(method.energy - method.mean_energy)' + method.σ * method.dW
-  @. method.x += method.update
-  method.x_difference = LinearAlgebra.norm(method.update)
-  method.f_min = minimum(method.energy)
+noise_isotropic(model, drift) = model.sqrt_Δt * randn()
+noise_anisotropic(model, drift) = model.sqrt_Δt * randn() * drift
 
-  update_scheduler!(method.scheduler)
-  method.t += method.Δt
-  return nothing
-end
+function inner_step!(method::CBO)
+  D, N, M = method.D, method.N, method.M
 
-function update_mean!(method::CBO)
-  @. method.mean = 0
-  total_weight = 0
-
-  for p in 1:(method.N)
-    x_p = view(method.x, :, p)
-    energy = method.f(x_p)
-    method.energy[p] = energy
-    weight = exp(-method.scheduler.α * energy)
-    @. method.mean += weight * x_p
-    total_weight += weight
-  end
-
-  @. method.mean /= total_weight
-  method.mean_energy = method.f(method.mean)
-
-  @. method.mean_difference = method.mean - method.x
-  return nothing
-end
-
-function terminate(method::CBO)
-  for check in [check_max_time, check_energy, check_update_diff, check_max_eval]
-    if check(method)
-      println("Returning on check: $check")
-      return true
+  compute_consensus!(method)
+  @threads for m in 1:M
+    for n in 1:N
+      mul =
+        -method.Δt *
+        method.λ *
+        method.correction(
+          method,
+          method.energy[n, m] - method.consensus_energy[m],
+        )
+      for d in 1:D
+        drift = method.x[d, n, m] - method.consensus[d, m]
+        method.x[d, n, m] += mul * drift + method.noise(method, drift)
+      end
     end
   end
-  return false
+
+  return nothing
 end
 
-check_max_time(method::CBO) = method.t > method.T;
+function compute_consensus!(method::CBO)
+  D, N, M = method.D, method.N, method.M
 
-check_energy(method::CBO) = method.f_min < method.energy_tol;
+  apply!(method.f, method.energy, method.x)
+  method.num_f_eval += method.N * method.M
 
-check_update_diff(method::CBO) = method.x_difference < method.diff_tol;
+  @threads for m in 1:M
+    c = view(method.consensus, :, m)
+    X = view(method.x, :, :, m)
 
-###TODO: max evals
-check_max_eval(method::CBO) = false;
+    c .= 0.0
+    weight_sum = 0.0
+    for n in 1:N
+      weight = exp(-method.α * method.energy[n, m])
+      weight_sum += weight
+      x = view(X, :, n)
+      @. c += weight * x
+    end
+    c ./= weight_sum
+
+    method.consensus_energy[m] = apply!(method.f, c)
+  end
+
+  return nothing
+end
