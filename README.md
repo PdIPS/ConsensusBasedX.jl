@@ -1,3 +1,5 @@
+![cbxjl](https://github.com/PdIPS/CBX.jl/assets/44805883/238eca7e-00b7-4008-82ec-1fe233c8f8e1)
+
 # CBX.jl
 
 [![Build Status](https://github.com/PdIPS/CBX.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/PdIPS/CBX.jl/actions/workflows/CI.yml?query=branch%3Amain)
