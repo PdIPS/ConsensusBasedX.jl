@@ -1,3 +1,5 @@
+![cbxjl](https://github.com/PdIPS/CBX.jl/assets/44805883/238eca7e-00b7-4008-82ec-1fe233c8f8e1)
+
 # CBX.jl
 
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://PdIPS.github.io/CBX.jl/stable/)
