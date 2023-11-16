@@ -90,15 +90,15 @@ end
 
   consensus = zeros(D, M)
 
-  update_diff = [Inf for m in 1:M]
+  update_diff = [Inf for m ∈ 1:M]
 
-  energy = [Inf for n in 1:N, m in 1:M]
-  consensus_energy = [Inf for m in 1:M]
+  energy = [Inf for n ∈ 1:N, m ∈ 1:M]
+  consensus_energy = [Inf for m ∈ 1:M]
   best_cur_energy = zeros(M)
-  best_energy = [Inf for m in 1:M]
+  best_energy = [Inf for m ∈ 1:M]
 
-  f_min = [Inf for m in 1:M]
-  f_min_idx = [1 for m in 1:M]
+  f_min = [Inf for m ∈ 1:M]
+  f_min_idx = [1 for m ∈ 1:M]
   num_f_eval = 0
 
   best_cur_particle = zeros(D, M)
@@ -154,8 +154,8 @@ function inner_step!(method::CBO)
   D, N, M = method.D, method.N, method.M
 
   compute_consensus!(method)
-  @threads for m in 1:M
-    for n in 1:N
+  @threads for m ∈ 1:M
+    for n ∈ 1:N
       mul =
         -method.Δt *
         method.λ *
@@ -163,7 +163,7 @@ function inner_step!(method::CBO)
           method,
           method.energy[n, m] - method.consensus_energy[m],
         )
-      for d in 1:D
+      for d ∈ 1:D
         drift = method.x[d, n, m] - method.consensus[d, m]
         method.x[d, n, m] += mul * drift + method.noise(method, drift)
       end
@@ -179,13 +179,13 @@ function compute_consensus!(method::CBO)
   apply!(method.f, method.energy, method.x)
   method.num_f_eval += method.N * method.M
 
-  @threads for m in 1:M
+  @threads for m ∈ 1:M
     c = view(method.consensus, :, m)
     X = view(method.x, :, :, m)
 
     c .= 0.0
     weight_sum = 0.0
-    for n in 1:N
+    for n ∈ 1:N
       weight = exp(-method.α * method.energy[n, m])
       weight_sum += weight
       x = view(X, :, n)

@@ -1,16 +1,11 @@
-using Test
-using SafeTestsets
+using Test, SafeTestsets
 
 @testset "CBX.jl" begin
-  @safetestset "init_particles" begin
-    include("init_particles.jl")
-  end
-
-  @safetestset "Objectives" begin
-    include("Objectives.jl")
-  end
-
-  @safetestset "format" begin
-    include("format.jl")
+  for test ∈ ["aqua", "format", "init_particles", "Objectives"]
+    @eval begin
+      @safetestset $test begin
+        include($test * ".jl")
+      end
+    end
   end
 end

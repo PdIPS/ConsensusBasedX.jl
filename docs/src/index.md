@@ -1,3 +1,7 @@
+```@meta
+CurrentModule = CBX
+```
+
 # CBX.jl
 
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://PdIPS.github.io/CBX.jl/stable/)
@@ -7,4 +11,11 @@
 [![Aqua](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A julia package for consensus-based optimization
+## Function Documentation
+
+```@index
+```
+
+```@autodocs
+Modules = [CBX]
+```

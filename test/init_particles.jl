@@ -39,7 +39,7 @@ function test_init_particles_dist()
   distribution_scalar = Normal(1, 2)
   @test size(init_particles((; D, N, M, dist = distribution_scalar))) == target
 
-  distribution_one_particle = MultivariateNormal(D, 2)
+  distribution_one_particle = MvNormal(LinearAlgebra.Diagonal([2 for d ∈ 1:D]))
   @test size(init_particles((; D, N, M, dist = distribution_one_particle))) ==
         target
 

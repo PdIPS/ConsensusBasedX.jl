@@ -16,9 +16,9 @@ end
 function post_step!(method::ParticleDynamic)
   D, N, M = method.D, method.N, method.M
 
-  @threads for m in 1:M
+  @threads for m ∈ 1:M
     method.update_diff[m] = 0.0
-    for n in 1:N, d in 1:D
+    for n ∈ 1:N, d ∈ 1:D
       method.update_diff[m] += (method.x[d, n, m] - method.x_old[d, n, m])^2
     end
     method.update_diff[m] /= N
@@ -33,7 +33,7 @@ end
 function update_best_cur_particle!(method::ParticleDynamic)
   D, N, M = method.D, method.N, method.M
 
-  @threads for m in 1:M
+  @threads for m ∈ 1:M
     method.f_min[m], method.f_min_idx[m] = findmin(view(method.energy, :, m))
     copyto!(
       view(method.best_cur_particle, :, m),
@@ -48,7 +48,7 @@ end
 function update_best_particle!(method::ParticleDynamic)
   D, N, M = method.D, method.N, method.M
 
-  @threads for m in 1:M
+  @threads for m ∈ 1:M
     if (method.best_energy[m] > method.best_cur_energy[m])
       method.best_energy[m] = method.best_cur_energy[m]
       copyto!(
@@ -82,29 +82,32 @@ function init_track(track_list::Vector{Symbol})
     :x => track_x!,
   )
 
-  track = (; (s => dict_track[s] for s in track_list)...)
-  track_functions = Function[dict_method[s] for s in track_list]
+  track = (; (s => dict_track[s] for s ∈ track_list)...)
+  track_functions = Function[dict_method[s] for s ∈ track_list]
 
   return track, track_functions
 end
 
 function track!(method::ParticleDynamic)
   if method.it % method.track_step == 0
-    for fun in method.track_functions
+    for fun ∈ method.track_functions
       fun(method)
     end
   end
   return nothing
 end
 
-track_consensus!(method::ParticleDynamic) =
-  push!(method.track.consensus, copy(method.consensus));
+function track_consensus!(method::ParticleDynamic)
+  return push!(method.track.consensus, copy(method.consensus))
+end;
 
-track_energy!(method::ParticleDynamic) =
-  push!(method.track.energy, copy(method.best_energy));
+function track_energy!(method::ParticleDynamic)
+  return push!(method.track.energy, copy(method.best_energy))
+end;
 
-track_update_norm!(method::ParticleDynamic) =
-  push!(method.track.update_norm, copy(method.update_diff));
+function track_update_norm!(method::ParticleDynamic)
+  return push!(method.track.update_norm, copy(method.update_diff))
+end;
 
 track_x!(method::ParticleDynamic) = push!(method.track.x, copy(method.x));
 

@@ -37,7 +37,7 @@ method = CBO(config, f, x)
 
 # ### Run the CBO algorithm
 # while !terminate(method)
-for k in 1:10000
+for k ∈ 1:10000
   step!(method)
   if method.it % 10 == 0
     println(method.best_energy)

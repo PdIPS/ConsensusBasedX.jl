@@ -49,9 +49,9 @@ end
   if size(s) == (D, N, M)
     return s
   elseif size(s) == (D,)
-    return cat((rand(dist, N) for m in 1:M)..., dims = 3)
+    return cat((rand(dist, N) for m ∈ 1:M)..., dims = 3)
   elseif size(s) == (D, N)
-    return cat((rand(dist) for m in 1:M)..., dims = 3)
+    return cat((rand(dist) for m ∈ 1:M)..., dims = 3)
   elseif size(s) == ()
     return rand(dist, D, N, M)
   else
