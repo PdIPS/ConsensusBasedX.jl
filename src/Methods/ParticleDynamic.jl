@@ -1,9 +1,8 @@
-abstract type ParticleDynamic{T} end;
-
 function step!(method::ParticleDynamic)
   pre_step!(method)
   inner_step!(method)
   post_step!(method)
+  update_scheduler!(method)
   return nothing
 end
 
@@ -26,6 +25,8 @@ function post_step!(method::ParticleDynamic)
 
   update_best_cur_particle!(method)
   update_best_particle!(method)
+
+  process_particles!(method)
 
   return nothing
 end
@@ -67,8 +68,14 @@ function update_best_particle!(method::ParticleDynamic)
   return nothing
 end
 
+function process_particles!(method::ParticleDynamic)
+  @. method.x = clamp(method.x, -method.max_x_thresh, method.max_x_thresh)
+  return nothing
+end
+
 function init_track(track_list::Vector{Symbol})
   dict_track = Dict(
+    :it => Int[],
     :consensus => Array{Float64, 2}[],
     :energy => Vector{Float64}[],
     :update_norm => Vector{Float64}[],
@@ -76,6 +83,7 @@ function init_track(track_list::Vector{Symbol})
   )
 
   dict_method = Dict(
+    :it => track_it!,
     :consensus => track_consensus!,
     :energy => track_energy!,
     :update_norm => track_update_norm!,
@@ -97,6 +105,8 @@ function track!(method::ParticleDynamic)
   return nothing
 end
 
+track_it!(method::ParticleDynamic) = push!(method.track.it, method.it);
+
 function track_consensus!(method::ParticleDynamic)
   return push!(method.track.consensus, copy(method.consensus))
 end;
@@ -112,28 +122,21 @@ end;
 track_x!(method::ParticleDynamic) = push!(method.track.x, copy(method.x));
 
 function terminate(method::ParticleDynamic)
-  # def terminate(self, verbosity = 0):
-  #         loc_check = np.zeros((self.M,len(self.checks)), dtype=bool)
-  #         for i,check in enumerate(self.checks):
-  #             loc_check[:,i] = check()
+  if method.it >= method.max_it
+    return true
+  end
 
-  #         all_check = np.sum(loc_check, axis=1)
+  if method.num_f_eval >= method.max_eval
+    return true
+  end
 
-  #         for j in range(self.M):
-  #             if all_check[j] and not self.all_check[j]:
-  #                 self.term_reason[j] = np.where(loc_check[j,:])[0]
-  #         self.all_check = all_check
-
-  #         if np.all(self.all_check):
-  #             for j in range(self.M):
-  #                 if verbosity > 0:
-  #                     print('Run ' + str(j) + ' returning on checks: ')
-  #                     for k in self.term_reason[j]:
-  #                         print(self.checks[k].__name__)
-  #             return True
-  #         else:
-  #             return False
-  return true
+  energy_ready = true
+  diff_ready = true
+  for m ∈ 1:(method.M)
+    energy_ready = energy_ready && (method.f_min[m] <= method.energy_tol)
+    diff_ready = diff_ready && (method.update_diff[m] <= method.diff_tol)
+  end
+  return energy_ready || diff_ready
 end
 
 const minimise = nothing;

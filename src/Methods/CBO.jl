@@ -8,9 +8,14 @@ const DEFAULT_CBO_CONFIG = (;
   noise = :isotropic,
   track_step = 1,
   track_list = Symbol[],
+  energy_tol = -Inf,
+  diff_tol = 0.0,
+  max_eval = 1_000_000_000_000_000,
+  max_it = 1_000_000_000_000_000,
+  max_x_thresh = Inf,
 );
 
-mutable struct CBO{T} <: CBXDynamic{T}
+mutable struct CBO{T, S} <: ParticleDynamic{T, S}
   D::Int
   N::Int
   M::Int
@@ -36,6 +41,8 @@ mutable struct CBO{T} <: CBXDynamic{T}
   update_diff::Vector{Float64}
 
   energy::Matrix{Float64}
+  exponents::Matrix{Float64}
+  logsums::Matrix{Float64}
   consensus_energy::Vector{Float64}
   best_cur_energy::Vector{Float64}
   best_energy::Vector{Float64}
@@ -51,6 +58,14 @@ mutable struct CBO{T} <: CBXDynamic{T}
   track_list::Vector{Symbol}
   track::T
   track_functions::Vector{Function}
+
+  scheduler::S
+
+  energy_tol::Float64
+  diff_tol::Float64
+  max_eval::Int
+  max_it::Int
+  max_x_thresh::Float64
 end
 
 @config CBO(f) = CBO(config, f, init_particles(config));
@@ -67,6 +82,11 @@ end
   noise::Symbol,
   track_step::Int,
   track_list::Vector{Symbol},
+  energy_tol::Float64,
+  diff_tol::Float64,
+  max_eval::Int,
+  max_it::Int,
+  max_x_thresh::Float64,
 )
   D, N, M = config.D, config.N, config.M
 
@@ -75,7 +95,7 @@ end
 
   t = 0.0
   sqrt_Δt = sqrt(Δt)
-  it = 0
+  it = 1
 
   correction_dict = Dict(
     :identity => corr_identity,
@@ -93,6 +113,8 @@ end
   update_diff = [Inf for m ∈ 1:M]
 
   energy = [Inf for n ∈ 1:N, m ∈ 1:M]
+  exponents = [Inf for n ∈ 1:N, m ∈ 1:M]
+  logsums = [Inf for n ∈ [1], m ∈ 1:M]
   consensus_energy = [Inf for m ∈ 1:M]
   best_cur_energy = zeros(M)
   best_energy = [Inf for m ∈ 1:M]
@@ -104,7 +126,10 @@ end
   best_cur_particle = zeros(D, M)
   best_particle = zeros(D, M)
 
+  track_list = [:it, track_list...]
   track, track_functions = init_track(track_list)
+
+  scheduler = Scheduler(config)
 
   return CBO(
     D,
@@ -126,6 +151,8 @@ end
     consensus,
     update_diff,
     energy,
+    exponents,
+    logsums,
     consensus_energy,
     best_cur_energy,
     best_energy,
@@ -138,17 +165,27 @@ end
     track_list,
     track,
     track_functions,
+    scheduler,
+    energy_tol,
+    diff_tol,
+    max_eval,
+    max_it,
+    max_x_thresh,
   )
 end
 
 export CBO;
 
-corr_identity(method, s::Real) = s;
-corr_Heaviside(method, s::Real) = 1.0 * (s > 0);
-corr_Heaviside_reg(method, s::Real) = (1 + tanh(s / method.ε)) / 2;
+corr_identity(method, scaled_drift::Real, energy_diff::Real) = scaled_drift;
+function corr_Heaviside(method, scaled_drift::Real, energy_diff::Real)
+  return scaled_drift * (energy_diff > 0)
+end;
+function corr_Heaviside_reg(method, scaled_drift::Real, energy_diff::Real)
+  return scaled_drift * (1 + tanh(energy_diff / method.ε)) / 2
+end;
 
-noise_isotropic(model, drift) = model.sqrt_Δt * randn()
-noise_anisotropic(model, drift) = model.sqrt_Δt * randn() * drift
+noise_isotropic(model, drift) = model.sqrt_Δt * randn();
+noise_anisotropic(model, drift) = model.sqrt_Δt * randn() * drift;
 
 function inner_step!(method::CBO)
   D, N, M = method.D, method.N, method.M
@@ -156,16 +193,14 @@ function inner_step!(method::CBO)
   compute_consensus!(method)
   @threads for m ∈ 1:M
     for n ∈ 1:N
-      mul =
-        -method.Δt *
-        method.λ *
-        method.correction(
-          method,
-          method.energy[n, m] - method.consensus_energy[m],
-        )
+      energy_diff = method.energy[n, m] - method.consensus_energy[m]
       for d ∈ 1:D
         drift = method.x[d, n, m] - method.consensus[d, m]
-        method.x[d, n, m] += mul * drift + method.noise(method, drift)
+        scaled_drift = method.Δt * method.λ * drift
+        # @show drift
+        noise = method.σ * method.noise(method, drift)
+        shift = method.correction(method, scaled_drift, energy_diff)
+        method.x[d, n, m] += noise - shift
       end
     end
   end
@@ -177,22 +212,22 @@ function compute_consensus!(method::CBO)
   D, N, M = method.D, method.N, method.M
 
   apply!(method.f, method.energy, method.x)
+  # @show method.energy
   method.num_f_eval += method.N * method.M
+
+  @. method.exponents = -method.α * method.energy
+  LogExpFunctions.logsumexp!(method.logsums, method.exponents)
 
   @threads for m ∈ 1:M
     c = view(method.consensus, :, m)
     X = view(method.x, :, :, m)
 
     c .= 0.0
-    weight_sum = 0.0
     for n ∈ 1:N
-      weight = exp(-method.α * method.energy[n, m])
-      weight_sum += weight
+      weight = exp(-method.α * method.energy[n, m] - method.logsums[1, m])
       x = view(X, :, n)
       @. c += weight * x
     end
-    c ./= weight_sum
-
     method.consensus_energy[m] = apply!(method.f, c)
   end
 

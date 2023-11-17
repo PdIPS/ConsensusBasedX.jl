@@ -1,12 +1,14 @@
 name = "CBX"
 uuid = "395ff7de-eab4-4c3d-8b08-1558ec221b6c"
 authors = ["Dr Rafael Bailo"]
-version = "0.7.3"
+version = "0.8.0"
 
 [deps]
 Default = "d739bc73-037a-4484-8212-e0e00e9ea6bf"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+LogExpFunctions = "2ab3a3ac-af41-5b50-aa03-7779005ae688"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 
 [compat]

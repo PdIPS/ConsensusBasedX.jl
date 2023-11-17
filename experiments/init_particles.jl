@@ -28,7 +28,7 @@ config = (; D, N, M, dist)
 X = init_particles(config)
 
 ### Initialise particles specifying a multivariate distribution for each particle
-dist = Distributions.MultivariateNormal(D, 2)
+dist = Distributions.MvNormal(LinearAlgebra.Diagonal([2 for d ∈ 1:D]))
 config = (; D, N, M, dist)
 X = init_particles(config)
 

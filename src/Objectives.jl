@@ -1,5 +1,3 @@
-abstract type Objective end;
-
 function apply!(
   obj::Objective,
   Y::AbstractArray{Float64, 2},
@@ -20,9 +18,10 @@ struct Quadratic <: Objective
 end
 Quadratic(; α::Real = 1) = Quadratic(α);
 export Quadratic;
+
 function apply!(obj::Quadratic, X::AbstractArray{Float64, 1})
   return obj.α * LinearAlgebra.norm_sqr(X) / 2
-end;
+end
 
 struct Rastrigin <: Objective
   b::Float64
