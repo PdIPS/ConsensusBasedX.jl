@@ -1,6 +1,6 @@
 module CBX
 
-using Default, Reexport
+using DefaultKeywordArguments, Reexport
 
 import Distributions
 
@@ -28,7 +28,7 @@ export Objectives
 
 module Schedulers
 
-  using Default, Reexport
+  using DefaultKeywordArguments, Reexport
   @reexport using ..Types
 
   include("./Schedulers.jl")
@@ -38,7 +38,7 @@ export Schedulers
 
 module Methods
 
-  using Default, Reexport
+  using DefaultKeywordArguments, Reexport
   @reexport using ..Types
 
   import Base.Threads.@threads
