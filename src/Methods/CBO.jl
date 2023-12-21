@@ -110,17 +110,17 @@ end
 
   consensus = zeros(D, M)
 
-  update_diff = [Inf for m ∈ 1:M]
+  update_diff = fill(Inf, M)
 
-  energy = [Inf for n ∈ 1:N, m ∈ 1:M]
-  exponents = [Inf for n ∈ 1:N, m ∈ 1:M]
-  logsums = [Inf for n ∈ [1], m ∈ 1:M]
-  consensus_energy = [Inf for m ∈ 1:M]
+  energy = fill(Inf, N, M)
+  exponents = fill(Inf, N, M)
+  logsums = fill(Inf, 1, M)
+  consensus_energy = fill(Inf, M)
   best_cur_energy = zeros(M)
-  best_energy = [Inf for m ∈ 1:M]
+  best_energy = fill(Inf, M)
 
-  f_min = [Inf for m ∈ 1:M]
-  f_min_idx = [1 for m ∈ 1:M]
+  f_min = fill(Inf, M)
+  f_min_idx = ones(M)
   num_f_eval = 0
 
   best_cur_particle = zeros(D, M)
