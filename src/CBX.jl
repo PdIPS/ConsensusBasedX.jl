@@ -50,6 +50,7 @@ module Methods
 
   include("./Methods/ParticleDynamic.jl")
   include("./Methods/CBO.jl")
+  include("./Methods/CBS.jl")
 
   export minimise, minimize
   export step!
@@ -57,6 +58,7 @@ module Methods
 end
 export Methods
 @reexport import CBX.Methods.CBO
+@reexport import CBX.Methods.CBS
 @reexport import CBX.Methods.minimise, CBX.Methods.minimize
 
 module Plotting

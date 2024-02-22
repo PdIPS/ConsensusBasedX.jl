@@ -1,11 +1,12 @@
-const DEFAULT_CBO_CONFIG = (;
+# Todo:
+# - Add scheduler based on ESS
+# - Refactor with CBO
+# - Add termination criterion?
+
+const DEFAULT_CBS_CONFIG = (;
   Δt = 0.1,
   α = 1.0,
   λ = 1.0,
-  σ = 1.0,
-  ε = 1e-3,
-  correction = :Heaviside,
-  noise = :isotropic,
   track_step = 1,
   track_list = Symbol[],
   energy_tol = -Inf,
@@ -13,9 +14,10 @@ const DEFAULT_CBO_CONFIG = (;
   max_eval = 1_000_000_000_000_000,
   max_it = 1_000_000_000_000_000,
   max_x_thresh = Inf,
+  mode = :sampling
 );
 
-mutable struct CBO{T, S} <: ParticleDynamic{T, S}
+mutable struct CBS{T, S} <: ParticleDynamic{T, S}
   D::Int
   N::Int
   M::Int
@@ -31,10 +33,6 @@ mutable struct CBO{T, S} <: ParticleDynamic{T, S}
 
   α::Float64
   λ::Float64
-  σ::Real
-  ε::Real
-  correction::Function
-  noise::Function
 
   consensus::Matrix{Float64}
 
@@ -68,18 +66,13 @@ mutable struct CBO{T, S} <: ParticleDynamic{T, S}
   max_x_thresh::Float64
 end
 
-@config CBO(f) = CBO(config, f, init_particles(config));
+@config CBS(f) = CBS(config, f, init_particles(config));
 
-@config DEFAULT_CBO_CONFIG function CBO(
+@config DEFAULT_CBS_CONFIG function CBS(
   f,
   x;
   Δt::Real,
   α::Real,
-  λ::Real,
-  σ::Real,
-  ε::Real,
-  correction::Symbol,
-  noise::Symbol,
   track_step::Int,
   track_list::Vector{Symbol},
   energy_tol::Float64,
@@ -87,6 +80,7 @@ end
   max_eval::Int,
   max_it::Int,
   max_x_thresh::Float64,
+  mode::Symbol,
 )
   D, N, M = config.D, config.N, config.M
 
@@ -97,19 +91,7 @@ end
   sqrt_Δt = sqrt(Δt)
   it = 1
 
-  correction_dict = Dict(
-    :identity => corr_identity,
-    :Heaviside => corr_Heaviside,
-    :Heaviside_reg => corr_Heaviside_reg,
-  )
-  correction_method = correction_dict[correction]
-
-  noise_dict =
-    Dict(:isotropic => noise_isotropic, :anisotropic => noise_isotropic)
-  noise_method = noise_dict[noise]
-
   consensus = zeros(D, M)
-
   update_diff = fill(Inf, M)
 
   energy = fill(Inf, N, M)
@@ -119,6 +101,7 @@ end
   best_cur_energy = zeros(M)
   best_energy = fill(Inf, M)
 
+  σ = fill(zeros(D, D), M)
   f_min = fill(Inf, M)
   f_min_idx = ones(Int, M)
   num_f_eval = 0
@@ -128,10 +111,11 @@ end
 
   track_list = [:it, track_list...]
   track, track_functions = init_track(track_list)
+  λ = mode === :optim ? 1 : 1/(1 + α)
 
   scheduler = Scheduler(config)
 
-  return CBO(
+  return CBS(
     D,
     N,
     M,
@@ -144,10 +128,6 @@ end
     it,
     α,
     λ,
-    σ,
-    ε,
-    correction_method,
-    noise_method,
     consensus,
     update_diff,
     energy,
@@ -174,41 +154,34 @@ end
   )
 end
 
-export CBO;
+export CBS;
 
-corr_identity(method, scaled_drift::Real, energy_diff::Real) = scaled_drift;
-function corr_Heaviside(method, scaled_drift::Real, energy_diff::Real)
-  return scaled_drift * (energy_diff > 0)
-end;
-function corr_Heaviside_reg(method, scaled_drift::Real, energy_diff::Real)
-  return scaled_drift * (1 + tanh(energy_diff / method.ε)) / 2
-end;
-
-noise_isotropic(model, drift) = model.sqrt_Δt * randn();
-noise_anisotropic(model, drift) = model.sqrt_Δt * randn() * drift;
-
-function inner_step!(method::CBO)
+function inner_step!(method::CBS)
   D, N, M = method.D, method.N, method.M
+  Δt, λ = method.Δt, method.λ
 
   compute_consensus!(method)
   @threads for m ∈ 1:M
-    for n ∈ 1:N
-      energy_diff = method.energy[n, m] - method.consensus_energy[m]
-      for d ∈ 1:D
-        drift = method.x[d, n, m] - method.consensus[d, m]
-        scaled_drift = method.Δt * method.λ * drift
-        # @show drift
-        noise = method.σ * method.noise(method, drift)
-        shift = method.correction(method, scaled_drift, energy_diff)
-        method.x[d, n, m] += noise - shift
-      end
-    end
-  end
+    x = view(method.x, :, :, m)
+    energy = view(method.energy, :, m)
+    consensus = view(method.consensus,:, m)
+    drift = x .- consensus
 
+    # This ensures that the maximum weight is 1 before normalization
+    weights = exp.(- method.α .* (energy .- minimum(energy)))
+    rt_weights = sqrt.(reshape(weights / sum(weights), 1, N))
+
+    # Use square root of weights to ensure symmetry
+    weighted_cov = (rt_weights .* drift)*(rt_weights .* drift)'
+    sqrt_cov = real(sqrt(weighted_cov))
+
+    γdrif, γdiff = exp(-Δt), √((1 - exp(-2Δt))/λ)
+    x .= consensus .+ γdrif*drift .+ γdiff*sqrt_cov*randn(D, N)
+  end
   return nothing
 end
 
-function compute_consensus!(method::CBO)
+function compute_consensus!(method::CBS)
   D, N, M = method.D, method.N, method.M
 
   apply!(method.f, method.energy, method.x)
@@ -233,3 +206,5 @@ function compute_consensus!(method::CBO)
 
   return nothing
 end
+
+# vim: tabstop=2 shiftwidth=2

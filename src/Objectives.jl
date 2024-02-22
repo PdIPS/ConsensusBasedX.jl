@@ -50,8 +50,8 @@ function apply!(obj::Ackley, X::AbstractVector{Float64})
   result = 0.0
   A = 20 + exp(1)
   Z = X .- obj.shift
-  result = 20 + exp(1) 
-  result += - 20 * exp(-.2*sqrt(1/obj.dim * sum(abs2, Z))) 
+  result = 20 + exp(1)
+  result += - 20 * exp(-.2*sqrt(1/obj.dim * sum(abs2, Z)))
   result += - exp(1/obj.dim * sum(cos, 2π*Z))
   return result
 end
