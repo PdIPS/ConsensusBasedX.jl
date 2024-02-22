@@ -38,3 +38,20 @@ function apply!(obj::Rastrigin, X::AbstractArray{Float64, 1})
   end
   return result / length(X) + obj.c
 end
+
+struct Ackley <: Objective
+  shift::Float64
+  dim::Float64
+end
+Ackley(; shift::Real = 0, dim::Real = 2) = Ackley(shift, dim);
+export Ackley;
+
+function apply!(obj::Ackley, X::AbstractVector{Float64})
+  result = 0.0
+  A = 20 + exp(1)
+  Z = X .- obj.shift
+  result = 20 + exp(1) 
+  result += - 20 * exp(-.2*sqrt(1/obj.dim * sum(abs2, Z))) 
+  result += - exp(1/obj.dim * sum(cos, 2π*Z))
+  return result
+end
