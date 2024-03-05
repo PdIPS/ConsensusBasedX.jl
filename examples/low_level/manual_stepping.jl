@@ -1,6 +1,3 @@
-using Pkg;
-Pkg.activate(".");
-
 using CBX, CBX.CBXLowLevel
 
 config =
