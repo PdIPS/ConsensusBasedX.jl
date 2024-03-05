@@ -1,92 +1,40 @@
 module CBX
 
-using DefaultKeywordArguments, Reexport
+import Distributions, LinearAlgebra, LogExpFunctions
+using DefaultKeywordArguments
 
-import Distributions
+include("./types/abstract.jl")
+include("./types/modes.jl")
+include("./types/parallelisation.jl")
 
-module Types
+include("./utils/arrays.jl")
+include("./utils/logging.jl")
+include("./utils/macros.jl")
+include("./utils/objectives.jl")
+include("./utils/settings.jl")
+include("./utils/tuples.jl")
+include("./utils/types.jl")
 
-  include("./Types.jl")
+include("./interface/config.jl")
+include("./interface/initialise_particles.jl")
+include("./interface/maximise.jl")
+include("./interface/minimise.jl")
+include("./interface/optimise.jl")
+include("./interface/parse_config.jl")
 
-end
-export Types
+include("./dynamics/ParticleDynamics.jl")
+include("./dynamics/benchmark_dynamic.jl")
+include("./dynamics/is_dynamic_pending.jl")
+include("./dynamics/run_dynamic.jl")
 
-include("./init_particles.jl")
+include("./CBO/ConsensusBasedOptimisation.jl")
+include("./CBO/CBO_method.jl")
+include("./CBO/corrections.jl")
+include("./CBO/is_method_pending.jl")
 
-module Objectives
-
-  using Reexport
-  @reexport using ..Types
-
-  import Base.Threads.@threads
-  import LinearAlgebra
-
-  include("./Objectives.jl")
-
-end
-export Objectives
-
-module Schedulers
-
-  using DefaultKeywordArguments, Reexport
-  @reexport using ..Types
-
-  include("./Schedulers.jl")
-
-end
-export Schedulers
-
-module Methods
-
-  using DefaultKeywordArguments, Reexport
-  @reexport using ..Types
-
-  import Base.Threads.@threads
-  import LogExpFunctions
-  import ..init_particles
-  import ..Objectives.Objective, ..Objectives.apply!
-  import ..Schedulers.Scheduler,
-    ..Schedulers.MultiplySchedulerAction, ..Schedulers.update_scheduler!
-
-  include("./Methods/ParticleDynamic.jl")
-  include("./Methods/CBO.jl")
-  include("./Methods/CBS.jl")
-
-  export minimise, minimize
-  export step!
-
-end
-export Methods
-@reexport import CBX.Methods.CBO
-@reexport import CBX.Methods.CBS
-@reexport import CBX.Methods.minimise, CBX.Methods.minimize
-
-module Plotting
-
-  using Plots, Reexport
-  @reexport using ..Types
-
-  import Plots.plot
-
-  include("./Plotting.jl")
-  export plot
-
-end
-export Plotting
-
-module LowLevel
-
-  using Reexport
-  @reexport using CBX
-  @reexport using CBX.Objectives
-  @reexport using CBX.Schedulers
-  @reexport using CBX.Methods
-  @reexport using CBX.Plotting
-  @reexport import CBX.Methods.terminate
-  @reexport import ..init_particles,
-    ..initialise_particles, ..initialize_particles
-
-end
-export LowLevel
+include("./CBXLowLevel.jl")
+export CBXLowLevel
+include("./CBXPlots.jl")
+export CBXPlots
 
 end

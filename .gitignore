@@ -5,5 +5,7 @@
 docs/build/
 docs/Manifest.toml
 
-dev.jl
+build.*
+dev.*
+docs.*
 .vscode

@@ -1,0 +1,6 @@
+using CBX
+
+f(x) = CBX.Ackley(x, shift = 1)
+
+config = (; D = 2, M = 5, parallelisation = :EnsembleParallelisation)
+minimise(f, config)
