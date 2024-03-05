@@ -4,12 +4,12 @@ We provide two low-level interface examples for the convenience of advanced user
 
 ## Manual method definition
 
-This example bypasses the `minimise` interface, and defines the `ParticleDynamic` and `ConsensusBasedOptimisation` structs directly. However, [`CBX.construct_particle_dynamic_cache`](@ref) is used to construct the caches:
+This example bypasses the `minimise` interface, and defines the `ParticleDynamic` and `ConsensusBasedOptimisation` structs directly. However, [`ConsensusBasedX.construct_particle_dynamic_cache`](@ref) is used to construct the caches:
 ```julia
 config =
   (; D = 2, N = 20, M = 1, α = 10.0, λ = 1.0, σ = 1.0, Δt = 0.1, verbosity = 0)
 
-f(x) = CBX.Ackley(x, shift = 1)
+f(x) = ConsensusBasedX.Ackley(x, shift = 1)
 
 X₀ = [[rand(config.D) for n ∈ 1:(config.N)] for m ∈ 1:(config.M)]
 
@@ -31,7 +31,7 @@ finalise_dynamic!(particle_dynamic, particle_dynamic_cache)
 
 out = wrap_output(X₀, particle_dynamic, particle_dynamic_cache)
 ```
-[Full-code example](https://github.com/PdIPS/CBX.jl/blob/main/examples/low_level/low_level.jl).
+[Full-code example](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/low_level/low_level.jl).
 
 ## Manual stepping
 
@@ -40,7 +40,7 @@ This bypasses the `compute_dynamic!` method, performing the stepping manually in
 config =
   (; D = 2, N = 20, M = 1, α = 10.0, λ = 1.0, σ = 1.0, Δt = 0.1, verbosity = 0)
 
-f(x) = CBX.Ackley(x, shift = 1)
+f(x) = ConsensusBasedX.Ackley(x, shift = 1)
 
 X₀ = [[rand(config.D) for n ∈ 1:(config.N)] for m ∈ 1:(config.M)]
 
@@ -68,4 +68,4 @@ finalise_dynamic!(particle_dynamic, particle_dynamic_cache)
 
 out = wrap_output(X₀, particle_dynamic, particle_dynamic_cache)
 ```
-[Full-code example](https://github.com/PdIPS/CBX.jl/blob/main/examples/low_level/manual_stepping.jl).
+[Full-code example](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/low_level/manual_stepping.jl).

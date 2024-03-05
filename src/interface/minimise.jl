@@ -41,7 +41,7 @@ end
 export minimise
 
 @config function minimise_with_parsed_config(f; mode)
-  @verb "[CBX.jl]: Executing minimisation..."
+  @verb "[ConsensusBasedX.jl]: Executing minimisation..."
 
   X₀ = initialise_particles(config)
   parsed_X₀ = reshape(X₀, mode)

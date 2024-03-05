@@ -1,9 +1,9 @@
-module CBXLowLevel
+module ConsensusBasedXLowLevel
 
 using Reexport
 
-@reexport import ..CBXMethod,
-  ..CBXMethodCache,
+@reexport import ..ConsensusBasedXMethod,
+  ..ConsensusBasedXMethodCache,
   ..ConsensusBasedOptimisation,
   ..ConsensusBasedOptimisationCache,
   ..HeavisideCorrection,

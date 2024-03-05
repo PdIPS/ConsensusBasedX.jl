@@ -1,8 +1,8 @@
-using CBX
+using ConsensusBasedX
 
 using SafeTestsets, Test
 
-@testset "CBX.jl" begin
+@testset "ConsensusBasedX.jl" begin
   for test ∈ [
     "interface/initialise_particles",
     "interface/minimise",

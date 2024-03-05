@@ -1,7 +1,7 @@
-using CBX, JuliaFormatter, Test
+using ConsensusBasedX, JuliaFormatter, Test
 
 function tests()
-  f(s) = format(s; CBX.FORMAT_SETTINGS...)
+  f(s) = format(s; ConsensusBasedX.FORMAT_SETTINGS...)
   f("..")
   @test f("..")
 end

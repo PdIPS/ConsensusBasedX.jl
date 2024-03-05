@@ -1,9 +1,9 @@
-using CBX, CBX.CBXLowLevel
+using ConsensusBasedX, ConsensusBasedX.ConsensusBasedXLowLevel
 
 config =
   (; D = 2, N = 20, M = 1, α = 10.0, λ = 1.0, σ = 1.0, Δt = 0.1, verbosity = 0)
 
-f(x) = CBX.Ackley(x, shift = 1)
+f(x) = ConsensusBasedX.Ackley(x, shift = 1)
 
 X₀ = [[rand(config.D) for n ∈ 1:(config.N)] for m ∈ 1:(config.M)]
 

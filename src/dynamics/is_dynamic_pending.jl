@@ -44,8 +44,8 @@ function is_dynamic_pending_max_time(
 end
 
 function is_method_pending(
-  method::CBXMethod,
-  method_cache::CBXMethodCache,
+  method::ConsensusBasedXMethod,
+  method_cache::ConsensusBasedXMethodCache,
   particle_dynamic::ParticleDynamic,
   particle_dynamic_cache::ParticleDynamicCache,
   m::Int,

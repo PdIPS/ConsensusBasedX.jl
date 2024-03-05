@@ -31,11 +31,11 @@ function parse_config_mode(config::NamedTuple)
     mode = (mode isa Symbol) ? Val(mode) : mode
     if mode isa Val
       if !(mode isa Modes)
-        explanation = "The selected `mode` is not recognised as an instance of `CBX.Modes`."
+        explanation = "The selected `mode` is not recognised as an instance of `ConsensusBasedX.Modes`."
         throw(ArgumentError(explanation))
       end
     else
-      explanation = "The keyword `mode` should be a `Symbol`, a `String`, or an instance of `CBX.Modes`."
+      explanation = "The keyword `mode` should be a `Symbol`, a `String`, or an instance of `ConsensusBasedX.Modes`."
       throw(ArgumentError(explanation))
     end
     return merge(config, (; mode))
@@ -52,11 +52,11 @@ function parse_config_parallelisation(config::NamedTuple)
       (parallelisation isa Symbol) ? Val(parallelisation) : parallelisation
     if parallelisation isa Val
       if !(parallelisation isa Parallelisations)
-        explanation = "The selected `parallelisation` is not recognised as an instance of `CBX.Parallelisations`."
+        explanation = "The selected `parallelisation` is not recognised as an instance of `ConsensusBasedX.Parallelisations`."
         throw(ArgumentError(explanation))
       end
     else
-      explanation = "The keyword `parallelisation` should be a `Symbol`, a `String`, or an instance of `CBX.Parallelisations`."
+      explanation = "The keyword `parallelisation` should be a `Symbol`, a `String`, or an instance of `ConsensusBasedX.Parallelisations`."
       throw(ArgumentError(explanation))
     end
     return merge(config, (; parallelisation))

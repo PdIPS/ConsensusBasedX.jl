@@ -3,23 +3,28 @@
 
 push!(LOAD_PATH, "../src/")
 
-using CBX
+using ConsensusBasedX
 using Documenter
 
-DocMeta.setdocmeta!(CBX, :DocTestSetup, :(using CBX); recursive = true)
+DocMeta.setdocmeta!(
+  ConsensusBasedX,
+  :DocTestSetup,
+  :(using ConsensusBasedX);
+  recursive = true,
+)
 
 makedocs(;
-  modules = [CBX],
+  modules = [ConsensusBasedX],
   authors = "Dr Rafael Bailo",
-  repo = "https://github.com/PdIPS/CBX.jl/blob/{commit}{path}#{line}",
-  sitename = "CBX.jl",
+  repo = "https://github.com/PdIPS/ConsensusBasedX.jl/blob/{commit}{path}#{line}",
+  sitename = "ConsensusBasedX.jl",
   format = Documenter.HTML(;
     sidebar_sitename = false,
     prettyurls = get(ENV, "CI", "false") == "true",
-    canonical = "https://PdIPS.github.io/CBX.jl",
+    canonical = "https://PdIPS.github.io/ConsensusBasedX.jl",
     edit_link = "main",
     assets = String[],
-    footer = "Copyright © 2024 [Dr Rafael Bailo](https://rafaelbailo.com/) and [Purpose-Driven Interacting Particle Systems Group](https://github.com/PdIPS). [MIT License](https://github.com/PdIPS/CBX.jl/blob/main/LICENSE).",
+    footer = "Copyright © 2024 [Dr Rafael Bailo](https://rafaelbailo.com/) and [Purpose-Driven Interacting Particle Systems Group](https://github.com/PdIPS). [MIT License](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/LICENSE).",
   ),
   pages = [
     "Home" => "index.md",
@@ -44,4 +49,4 @@ makedocs(;
   ],
 )
 
-deploydocs(; repo = "github.com/PdIPS/CBX.jl", devbranch = "main")
+deploydocs(; repo = "github.com/PdIPS/ConsensusBasedX.jl", devbranch = "main")

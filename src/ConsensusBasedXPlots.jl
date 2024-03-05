@@ -1,4 +1,4 @@
-module CBXPlots
+module ConsensusBasedXPlots
 
 using Reexport
 @reexport using LaTeXStrings, Plots

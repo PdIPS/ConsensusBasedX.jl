@@ -1,6 +1,6 @@
-using CBX, CBX.CBXPlots
+using ConsensusBasedX, ConsensusBasedX.ConsensusBasedXPlots
 
-f(x) = CBX.Ackley(x, shift = 1)
+f(x) = ConsensusBasedX.Ackley(x, shift = 1)
 
 out = minimise(f, D = 2, extended_output = true)
 

@@ -6,13 +6,15 @@ ConsensusBasedOptimisation
 Fields:
 
   - `f`, the objective function.
-  - `correction<:CBXCorrection`, a correction term.
+  - `correction<:ConsensusBasedXCorrection`, a correction term.
   - `α::Float64`, the the exponential weight parameter.
   - `λ::Float64`, the drift strengh.
   - `σ::Float64`, the noise strengh.
 """
-mutable struct ConsensusBasedOptimisation{TF, TCorrection <: CBXCorrection} <:
-               CBXMethod
+mutable struct ConsensusBasedOptimisation{
+  TF,
+  TCorrection <: ConsensusBasedXCorrection,
+} <: ConsensusBasedXMethod
   f::TF
   correction::TCorrection
   α::Float64
@@ -22,7 +24,7 @@ end
 
 @config function construct_CBO(
   f,
-  correction::CBXCorrection;
+  correction::ConsensusBasedXCorrection;
   α::Real = 10,
   λ::Real = 1,
   σ::Real = 1,
@@ -38,7 +40,7 @@ end
 ConsensusBasedOptimisationCache{T}
 ```
 
-**It is strongly recommended that you do not construct `ConsensusBasedOptimisationCache` by hand.** Instead, use [`CBX.construct_method_cache`](@ref).
+**It is strongly recommended that you do not construct `ConsensusBasedOptimisationCache` by hand.** Instead, use [`ConsensusBasedX.construct_method_cache`](@ref).
 
 Fields:
 
@@ -55,7 +57,7 @@ Fields:
   - `max_evaluations::Float64`, the maximum number of `f` evaluations.
   - `evaluations::Vector{Int}`, the current number of `f` evaluations.
 """
-mutable struct ConsensusBasedOptimisationCache{T} <: CBXMethodCache
+mutable struct ConsensusBasedOptimisationCache{T} <: ConsensusBasedXMethodCache
   consensus::Vector{Vector{T}}
   consensus_energy::Vector{T}
   consensus_energy_previous::Vector{T}
@@ -121,12 +123,12 @@ end
 construct_method_cache(
   config::NamedTuple,
   X₀::AbstractArray,
-  method::CBXMethod,
+  method::ConsensusBasedXMethod,
   particle_dynamic::ParticleDynamic,
 )
 ```
 
-A constructor helper for `CBXMethodCache`.
+A constructor helper for `ConsensusBasedXMethodCache`.
 """
 construct_method_cache
 

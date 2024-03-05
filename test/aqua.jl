@@ -1,3 +1,3 @@
-using CBX, Aqua
+using ConsensusBasedX, Aqua
 
-Aqua.test_all(CBX, ambiguities = false, deps_compat = false)
+Aqua.test_all(ConsensusBasedX, ambiguities = false, deps_compat = false)

@@ -5,10 +5,10 @@ ParticleDynamic
 
 Fields:
 
-  - `method<:CBXMethod`, the optimisation method.
+  - `method<:ConsensusBasedXMethod`, the optimisation method.
   - `Δt::Float64`, the time step.
 """
-mutable struct ParticleDynamic{TM <: CBXMethod}
+mutable struct ParticleDynamic{TM <: ConsensusBasedXMethod}
   method::TM
   Δt::Float64
 end
@@ -23,13 +23,13 @@ end
 ParticleDynamicCache
 ```
 
-**It is strongly recommended that you do not construct `ParticleDynamicCache` by hand.** Instead, use [`CBX.construct_particle_dynamic_cache`](@ref).
+**It is strongly recommended that you do not construct `ParticleDynamicCache` by hand.** Instead, use [`ConsensusBasedX.construct_particle_dynamic_cache`](@ref).
 
 Fields:
 
   - `mode` should be set to `ParticleMode`.
   - `parallelisation<:Parallelisations`, the parallelisation mode.
-  - `method_cache<:CBXMethodCache`, a cache for the `method` field of `ParticleDynamic`.
+  - `method_cache<:ConsensusBasedXMethodCache`, a cache for the `method` field of `ParticleDynamic`.
   - `D::Int`, the dimension of the problem.
   - `N::Int`, the number of particles per ensemble.
   - `M::Int`, the number of ensembles.
@@ -45,7 +45,7 @@ Fields:
 mutable struct ParticleDynamicCache{
   TMode <: Modes,
   TParallelisation <: Parallelisations,
-  TMC <: CBXMethodCache,
+  TMC <: ConsensusBasedXMethodCache,
   TX,
   TdX,
 }
@@ -130,13 +130,13 @@ construct_particle_dynamic_cache(
 )
 ```
 
-A constructor helper for `ParticleDynamicCache`. Calls [`CBX.construct_method_cache`](@ref) to construct the corresponding `CBXMethodCache`.
+A constructor helper for `ParticleDynamicCache`. Calls [`ConsensusBasedX.construct_method_cache`](@ref) to construct the corresponding `ConsensusBasedXMethodCache`.
 """
 construct_particle_dynamic_cache
 
 @config construct_method_cache(
   X₀::AbstractArray,
-  method::CBXMethod,
+  method::ConsensusBasedXMethod,
   particle_dynamic::ParticleDynamic,
 ) = nothing
 
@@ -172,8 +172,8 @@ end
 
 function initialise_method_cache!(
   X₀::AbstractArray,
-  method::CBXMethod,
-  method_cache::CBXMethodCache,
+  method::ConsensusBasedXMethod,
+  method_cache::ConsensusBasedXMethodCache,
   particle_dynamic::ParticleDynamic,
   particle_dynamic_cache::ParticleDynamicCache,
 )

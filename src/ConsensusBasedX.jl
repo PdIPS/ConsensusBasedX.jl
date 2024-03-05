@@ -1,4 +1,4 @@
-module CBX
+module ConsensusBasedX
 
 import Distributions, LinearAlgebra, LogExpFunctions
 using DefaultKeywordArguments
@@ -32,9 +32,9 @@ include("./CBO/CBO_method.jl")
 include("./CBO/corrections.jl")
 include("./CBO/is_method_pending.jl")
 
-include("./CBXLowLevel.jl")
-export CBXLowLevel
-include("./CBXPlots.jl")
-export CBXPlots
+include("./ConsensusBasedXLowLevel.jl")
+export ConsensusBasedXLowLevel
+include("./ConsensusBasedXPlots.jl")
+export ConsensusBasedXPlots
 
 end

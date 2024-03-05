@@ -19,7 +19,7 @@ function maximise(f, config::NamedTuple)
   if haskey(config, :mode)
     if !(config.mode isa TParticleMode)
       explanation =
-        "CBX.jl cannot define the function `x -> -f(x)` in mode `" *
+        "ConsensusBasedX.jl cannot define the function `x -> -f(x)` in mode `" *
         string(get_val(config.mode)) *
         "`. You should define the function yourself and call `minimise` instead."
       throw(ArgumentError(explanation))
