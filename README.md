@@ -28,14 +28,14 @@ For more detailed explanations and full-code examples, see the [documentation](h
 
 Consensus-based optimisation uses *particles* to minimise a function $f(x)$. The particles evolve following a stochastic differential equation:
 ```math
-\mathrm{d}X_i(t) = -\lambda \left( X_i - V \right) H \left[ f(X_i) - f(V) \right] \mathrm{d}t + \sqrt{2} \sigma \left| X_i(t) - V(t) \right| \mathrm{d}W_i(t),
+\mathrm{d}X_i(t) = -\lambda \left( X_i(t) - V(t) \right) H \left[ f(X_i(t)) - f(V(t)) \right] \mathrm{d}t + \sqrt{2} \sigma \left| X_i(t) - V(t) \right| \mathrm{d}W_i(t),
 ```
 where ``W_i`` are independent Brownian processes, and where
 ```math
 V(t) = \frac{
-\sum\limits_{i} X_i \exp(-\alpha f(X_i))
+\sum\limits_{i} X_i(t) \exp(-\alpha f(X_i(t)))
 }{
-\sum\limits_{i} \exp(-\alpha f(X_i))
+\sum\limits_{i} \exp(-\alpha f(X_i(t)))
 },
 ```
 is a weighted average of the particle's positions called the **consensus point**. $\lambda$, $\sigma$, and $\alpha$ are given positive parameters.
