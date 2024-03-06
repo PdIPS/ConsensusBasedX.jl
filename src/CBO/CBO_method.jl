@@ -36,12 +36,12 @@ function compute_CBO_consensus!(
 end
 
 function compute_CBO_update!(
-  method::ConsensusBasedOptimisation,
+  method::ConsensusBasedOptimisation{TF, TCorrection, <:TIsotropicNoise},
   method_cache::ConsensusBasedOptimisationCache,
   particle_dynamic::ParticleDynamic,
   particle_dynamic_cache::ParticleDynamicCache,
   m::Int,
-)
+) where {TF, TCorrection}
   @expand particle_dynamic_cache D N X dX Δt root2Δt
   @expand method correction λ σ
   @expand method_cache consensus consensus_energy distance energy
@@ -60,6 +60,29 @@ function compute_CBO_update!(
         (consensus[m][d] - X[m][n][d]) *
         correction(energy[m][n] - consensus_energy[m]) +
         root2Δt * σ * distance[m][n] * randn()
+    end
+  end
+  return nothing
+end
+
+function compute_CBO_update!(
+  method::ConsensusBasedOptimisation{TF, TCorrection, <:TAnisotropicNoise},
+  method_cache::ConsensusBasedOptimisationCache,
+  particle_dynamic::ParticleDynamic,
+  particle_dynamic_cache::ParticleDynamicCache,
+  m::Int,
+) where {TF, TCorrection}
+  @expand particle_dynamic_cache D N X dX Δt root2Δt
+  @expand method correction λ σ
+  @expand method_cache consensus consensus_energy energy
+
+  for n ∈ 1:N
+    for d ∈ 1:D
+      dX[m][n][d] =
+        (consensus[m][d] - X[m][n][d]) * (
+          Δt * λ * correction(energy[m][n] - consensus_energy[m]) +
+          root2Δt * σ * randn()
+        )
     end
   end
   return nothing

@@ -33,6 +33,7 @@ See [Stopping criteria](@ref).
 
 ## Advanced options
 
+- `noise = :IsotropicNoise` controls the type of noise, see [Noise types](@ref).
 - `benchmark::Bool = false` controls the benchmark behaviour. `benchmark = true` runs the `ParticleDynamic` on benchmark mode, see [Performance and benchmarking](@ref).
 - `extended_output::Bool = false` controls the output, and by default returns only the computed minimiser. `extended_output = true` returns additional information, see [Extended output](@ref).
 - `parallelisation = :NoParallelisation` controls the parallelisation of the `minimise` routine, switched off by default. `parallelisation=:EnsembleParallelisation` enables parallelisation, see  [Parallelisation](@ref).

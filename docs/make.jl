@@ -36,6 +36,7 @@ makedocs(;
       "Example objectives" => "example_objectives.md"
     ],
     "Mid-level usage" => [
+      "Noise types" => "noise_types.md"
       "Extended output" => "extended_output.md"
       "Output visualisation" => "output_visualisation.md"
       "Performance and benchmarking" => "performance_benchmarking.md"

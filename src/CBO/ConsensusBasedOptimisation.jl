@@ -14,9 +14,11 @@ Fields:
 mutable struct ConsensusBasedOptimisation{
   TF,
   TCorrection <: ConsensusBasedXCorrection,
+  TNoise <: Noises,
 } <: ConsensusBasedXMethod
   f::TF
   correction::TCorrection
+  noise::TNoise
   α::Float64
   λ::Float64
   σ::Float64
@@ -24,7 +26,8 @@ end
 
 @config function construct_CBO(
   f,
-  correction::ConsensusBasedXCorrection;
+  correction::ConsensusBasedXCorrection,
+  noise::Noises;
   α::Real = 10,
   λ::Real = 1,
   σ::Real = 1,
@@ -32,7 +35,14 @@ end
   @assert α >= 0
   @assert λ >= 0
   @assert σ >= 0
-  return ConsensusBasedOptimisation(f, correction, float(α), float(λ), float(σ))
+  return ConsensusBasedOptimisation(
+    f,
+    correction,
+    noise,
+    float(α),
+    float(λ),
+    float(σ),
+  )
 end
 
 """

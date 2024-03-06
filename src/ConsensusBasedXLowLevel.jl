@@ -2,13 +2,16 @@ module ConsensusBasedXLowLevel
 
 using Reexport
 
-@reexport import ..ConsensusBasedXMethod,
+@reexport import ..AnisotropicNoise,
+  ..ConsensusBasedXMethod,
   ..ConsensusBasedXMethodCache,
   ..ConsensusBasedOptimisation,
   ..ConsensusBasedOptimisationCache,
   ..HeavisideCorrection,
+  ..IsotropicNoise,
   ..NoCorrection,
   ..Modes,
+  ..Noises,
   ..Parallelisations,
   ..ParticleDynamic,
   ..ParticleDynamicCache,

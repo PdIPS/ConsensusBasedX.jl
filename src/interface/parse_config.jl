@@ -2,6 +2,7 @@ const DEFAULT_PARSED_CONFIG = (;
   N = 20,
   M = 1,
   mode = ParticleMode,
+  noise = IsotropicNoise,
   parallelisation = NoParallelisation,
   verbosity = 0,
 )
@@ -10,6 +11,7 @@ function parse_config(config::NamedTuple)
   check_config_has_D(config)
   config = parse_config_default(config)
   config = parse_config_mode(config)
+  config = parse_config_noise(config)
   config = parse_config_parallelisation(config)
   return config
 end
@@ -39,6 +41,25 @@ function parse_config_mode(config::NamedTuple)
       throw(ArgumentError(explanation))
     end
     return merge(config, (; mode))
+  end
+  return config
+end
+
+function parse_config_noise(config::NamedTuple)
+  if (haskey(config, :noise))
+    noise = config.noise
+    noise = (noise isa String) ? Symbol(noise) : noise
+    noise = (noise isa Symbol) ? Val(noise) : noise
+    if noise isa Val
+      if !(noise isa Noises)
+        explanation = "The selected `noise` is not recognised as an instance of `ConsensusBasedX.Noises`."
+        throw(ArgumentError(explanation))
+      end
+    else
+      explanation = "The keyword `noise` should be a `Symbol`, a `String`, or an instance of `ConsensusBasedX.Noises`."
+      throw(ArgumentError(explanation))
+    end
+    return merge(config, (; noise))
   end
   return config
 end
