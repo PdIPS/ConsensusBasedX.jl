@@ -5,6 +5,7 @@ using DefaultKeywordArguments
 
 include("./types/abstract.jl")
 include("./types/modes.jl")
+include("./types/noise.jl")
 include("./types/parallelisation.jl")
 
 include("./utils/arrays.jl")

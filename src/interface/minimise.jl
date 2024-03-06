@@ -66,7 +66,7 @@ end
   correction = HeavisideCorrection()
   # correction = RegularisedHeavisideCorrection(1e-3)
 
-  method = construct_CBO(config, f, correction)
+  method = construct_CBO(config, f, correction, config.noise)
   particle_dynamic = construct_particle_dynamic(config, method)
   return particle_dynamic
 end
