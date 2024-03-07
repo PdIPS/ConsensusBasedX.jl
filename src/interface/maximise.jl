@@ -26,7 +26,7 @@ function maximise(f, config::NamedTuple)
     end
   end
   g(x) = -f(x)
-  return minimise(config, g)
+  return minimise(g, config)
 end
 export maximise
 

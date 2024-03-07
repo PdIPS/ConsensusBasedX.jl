@@ -1,3 +1,3 @@
-abstract type ConsensusBasedXCorrection end
-abstract type ConsensusBasedXMethod end
-abstract type ConsensusBasedXMethodCache end
+abstract type CBXCorrection end
+abstract type CBXMethod end
+abstract type CBXMethodCache end

@@ -8,7 +8,9 @@ f(x) = ConsensusBasedX.Ackley(x, shift = 1)
 X₀ = [[rand(config.D) for n ∈ 1:(config.N)] for m ∈ 1:(config.M)]
 
 correction = HeavisideCorrection()
-method = ConsensusBasedOptimisation(f, correction, config.α, config.λ, config.σ)
+noise = IsotropicNoise
+method =
+  ConsensusBasedOptimisation(f, correction, noise, config.α, config.λ, config.σ)
 
 Δt = 0.1
 particle_dynamic = ParticleDynamic(method, Δt)
@@ -31,4 +33,4 @@ finalise_dynamic!(particle_dynamic, particle_dynamic_cache)
 
 out = wrap_output(X₀, particle_dynamic, particle_dynamic_cache)
 
-@show out.minimiser # should be close to [1, 1]
+out.minimiser # should be close to [1, 1]

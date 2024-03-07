@@ -1,6 +1,6 @@
 # Low-level interface
 
-Internally, the `minimise` routine relies on two constructs: the `ParticleDynamic` and a `ConsensusBasedXMethod`.
+Internally, the `minimise` routine relies on two constructs: the `ParticleDynamic` and a `CBXMethod`.
 
 ## ConsensusBasedXLowLevel
 
@@ -31,7 +31,7 @@ ConsensusBasedX.ParticleDynamicCache
 
 ## `ConsensusBasedOptimisation`
 
-The `ConsensusBasedOptimisation` struct (of type `ConsensusBasedXMethod`) defines the details of the *consensus-based optimisation method* (function evaluations, consensus point...).
+The `ConsensusBasedOptimisation` struct (of type `CBXMethod`) defines the details of the *consensus-based optimisation method* (function evaluations, consensus point...).
 
 ```@docs
 ConsensusBasedX.ConsensusBasedOptimisation
@@ -39,7 +39,7 @@ ConsensusBasedX.ConsensusBasedOptimisation
 
 ### `ConsensusBasedOptimisationCache`
 
-`ConsensusBasedOptimisation` requires a cache, `ConsensusBasedOptimisationCache` (of type `ConsensusBasedXMethodCache`). This can be constructed with:
+`ConsensusBasedOptimisation` requires a cache, `ConsensusBasedOptimisationCache` (of type `CBXMethodCache`). This can be constructed with:
 ```@docs
 ConsensusBasedX.construct_method_cache
 ```

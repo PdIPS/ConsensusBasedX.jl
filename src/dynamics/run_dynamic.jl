@@ -54,8 +54,8 @@ function initialise_dynamic!(
 end
 
 function initialise_method!(
-  method::ConsensusBasedXMethod,
-  method_cache::ConsensusBasedXMethodCache,
+  method::CBXMethod,
+  method_cache::CBXMethodCache,
   particle_dynamic::ParticleDynamic,
   particle_dynamic_cache::ParticleDynamicCache,
 )
@@ -90,7 +90,7 @@ function compute_dynamic!(
   particle_dynamic_cache::ParticleDynamicCache,
   m::Int,
 )
-  while is_dynamic_pending(particle_dynamic, particle_dynamic_cache, m)
+  while is_dynamic_pending(particle_dynamic, particle_dynamic_cache, m)[1]
     compute_dynamic_step!(particle_dynamic, particle_dynamic_cache, m)
   end
   return nothing
@@ -128,8 +128,8 @@ function compute_dynamic_step!(
 end
 
 function prepare_method_step!(
-  method::ConsensusBasedXMethod,
-  method_cache::ConsensusBasedXMethodCache,
+  method::CBXMethod,
+  method_cache::CBXMethodCache,
   particle_dynamic::ParticleDynamic,
   particle_dynamic_cache::ParticleDynamicCache,
   m::Int,
@@ -138,8 +138,8 @@ function prepare_method_step!(
 end
 
 function compute_method_step!(
-  method::ConsensusBasedXMethod,
-  method_cache::ConsensusBasedXMethodCache,
+  method::CBXMethod,
+  method_cache::CBXMethodCache,
   particle_dynamic::ParticleDynamic,
   particle_dynamic_cache::ParticleDynamicCache,
   m::Int,
@@ -157,8 +157,8 @@ function update_dynamic!(
 end
 
 function finalise_method_step!(
-  method::ConsensusBasedXMethod,
-  method_cache::ConsensusBasedXMethodCache,
+  method::CBXMethod,
+  method_cache::CBXMethodCache,
   particle_dynamic::ParticleDynamic,
   particle_dynamic_cache::ParticleDynamicCache,
   m::Int,
@@ -180,8 +180,8 @@ function finalise_dynamic!(
 end
 
 function finalise_method!(
-  method::ConsensusBasedXMethod,
-  method_cache::ConsensusBasedXMethodCache,
+  method::CBXMethod,
+  method_cache::CBXMethodCache,
   particle_dynamic::ParticleDynamic,
   particle_dynamic_cache::ParticleDynamicCache,
 )
@@ -204,8 +204,8 @@ end
 
 function wrap_output(
   X₀::AbstractArray,
-  method::ConsensusBasedXMethod,
-  method_cache::ConsensusBasedXMethodCache,
+  method::CBXMethod,
+  method_cache::CBXMethodCache,
   particle_dynamic::ParticleDynamic,
   particle_dynamic_cache::ParticleDynamicCache,
 )
