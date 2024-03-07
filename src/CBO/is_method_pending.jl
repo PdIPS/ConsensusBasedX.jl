@@ -5,35 +5,37 @@ function is_method_pending(
   particle_dynamic_cache::ParticleDynamicCache,
   m::Int,
 )
-  pending_energy_threshold = is_method_pending_energy_threshold(
+  if !is_method_pending_energy_threshold(
     particle_dynamic.method,
     particle_dynamic_cache.method_cache,
     particle_dynamic,
     particle_dynamic_cache,
     m,
   )
+    return false, "energy_threshold"
+  end
 
-  pending_energy_tolerance = is_method_pending_energy_tolerance(
+  if !is_method_pending_energy_tolerance(
     particle_dynamic.method,
     particle_dynamic_cache.method_cache,
     particle_dynamic,
     particle_dynamic_cache,
     m,
   )
+    return false, "energy_tolerance"
+  end
 
-  pending_max_evaluations = is_method_pending_max_evaluations(
+  if !is_method_pending_max_evaluations(
     particle_dynamic.method,
     particle_dynamic_cache.method_cache,
     particle_dynamic,
     particle_dynamic_cache,
     m,
   )
+    return false, "max_evaluations"
+  end
 
-  pending =
-    pending_energy_threshold &&
-    pending_energy_tolerance &&
-    pending_max_evaluations
-  return pending
+  return true, "method_pending"
 end
 
 function is_method_pending_energy_threshold(

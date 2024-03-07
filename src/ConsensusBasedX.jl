@@ -28,7 +28,7 @@ include("./dynamics/benchmark_dynamic.jl")
 include("./dynamics/is_dynamic_pending.jl")
 include("./dynamics/run_dynamic.jl")
 
-include("./CBO/ConsensusBasedOptimisation.jl")
+include("./CBO/CBO.jl")
 include("./CBO/CBO_method.jl")
 include("./CBO/corrections.jl")
 include("./CBO/is_method_pending.jl")

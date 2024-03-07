@@ -1,6 +1,6 @@
 function compute_CBO_consensus!(
-  method::ConsensusBasedOptimisation,
-  method_cache::ConsensusBasedOptimisationCache,
+  method::CBXMethod,
+  method_cache::CBXMethodCache,
   particle_dynamic::ParticleDynamic,
   particle_dynamic_cache::ParticleDynamicCache,
   m::Int,

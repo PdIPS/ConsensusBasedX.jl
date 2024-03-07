@@ -3,8 +3,8 @@ module ConsensusBasedXLowLevel
 using Reexport
 
 @reexport import ..AnisotropicNoise,
-  ..ConsensusBasedXMethod,
-  ..ConsensusBasedXMethodCache,
+  ..CBXMethod,
+  ..CBXMethodCache,
   ..ConsensusBasedOptimisation,
   ..ConsensusBasedOptimisationCache,
   ..HeavisideCorrection,
@@ -24,11 +24,16 @@ using Reexport
   ..Quadratic,
   ..compute_dynamic!,
   ..compute_dynamic_step!,
+  ..construct_CBO,
   ..construct_method_cache,
+  ..construct_particle_dynamic,
   ..construct_particle_dynamic_cache,
   ..finalise_dynamic!,
+  ..initialise_particles,
   ..initialise_particle_dynamic_cache!,
   ..initialise_dynamic!,
+  ..is_dynamic_pending,
+  ..parse_config,
   ..wrap_output
 
 end

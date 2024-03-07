@@ -1,10 +1,10 @@
-struct NoCorrection <: ConsensusBasedXCorrection end
+struct NoCorrection <: CBXCorrection end
 (c::NoCorrection)(s::Real) = 1.0
 
-struct HeavisideCorrection <: ConsensusBasedXCorrection end
+struct HeavisideCorrection <: CBXCorrection end
 (c::HeavisideCorrection)(s::Real) = 1.0 * (s > 0)
 
-struct RegularisedHeavisideCorrection <: ConsensusBasedXCorrection
+struct RegularisedHeavisideCorrection <: CBXCorrection
   ε::Float64
 end
 (c::RegularisedHeavisideCorrection)(s::Real) = (1 + tanh(s / c.ε)) / 2

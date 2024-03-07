@@ -5,10 +5,10 @@ ParticleDynamic
 
 Fields:
 
-  - `method<:ConsensusBasedXMethod`, the optimisation method.
+  - `method<:CBXMethod`, the optimisation method.
   - `Δt::Float64`, the time step.
 """
-mutable struct ParticleDynamic{TM <: ConsensusBasedXMethod}
+mutable struct ParticleDynamic{TM <: CBXMethod}
   method::TM
   Δt::Float64
 end
@@ -29,7 +29,7 @@ Fields:
 
   - `mode` should be set to `ParticleMode`.
   - `parallelisation<:Parallelisations`, the parallelisation mode.
-  - `method_cache<:ConsensusBasedXMethodCache`, a cache for the `method` field of `ParticleDynamic`.
+  - `method_cache<:CBXMethodCache`, a cache for the `method` field of `ParticleDynamic`.
   - `D::Int`, the dimension of the problem.
   - `N::Int`, the number of particles per ensemble.
   - `M::Int`, the number of ensembles.
@@ -45,7 +45,7 @@ Fields:
 mutable struct ParticleDynamicCache{
   TMode <: Modes,
   TParallelisation <: Parallelisations,
-  TMC <: ConsensusBasedXMethodCache,
+  TMC <: CBXMethodCache,
   TX,
   TdX,
 }
@@ -130,13 +130,13 @@ construct_particle_dynamic_cache(
 )
 ```
 
-A constructor helper for `ParticleDynamicCache`. Calls [`ConsensusBasedX.construct_method_cache`](@ref) to construct the corresponding `ConsensusBasedXMethodCache`.
+A constructor helper for `ParticleDynamicCache`. Calls [`ConsensusBasedX.construct_method_cache`](@ref) to construct the corresponding `CBXMethodCache`.
 """
 construct_particle_dynamic_cache
 
 @config construct_method_cache(
   X₀::AbstractArray,
-  method::ConsensusBasedXMethod,
+  method::CBXMethod,
   particle_dynamic::ParticleDynamic,
 ) = nothing
 
@@ -167,13 +167,22 @@ function set_Δt!(particle_dynamic_cache::ParticleDynamicCache, Δt::Real)
   particle_dynamic_cache.Δt = Δt
   particle_dynamic_cache.rootΔt = sqrt(Δt)
   particle_dynamic_cache.root2Δt = sqrt(2) * particle_dynamic_cache.rootΔt
+  set_Δt!(particle_dynamic_cache.method_cache, particle_dynamic_cache, Δt)
+  return nothing
+end
+
+function set_Δt!(
+  method_cache::CBXMethodCache,
+  particle_dynamic_cache::ParticleDynamicCache,
+  Δt::Real,
+)
   return nothing
 end
 
 function initialise_method_cache!(
   X₀::AbstractArray,
-  method::ConsensusBasedXMethod,
-  method_cache::ConsensusBasedXMethodCache,
+  method::CBXMethod,
+  method_cache::CBXMethodCache,
   particle_dynamic::ParticleDynamic,
   particle_dynamic_cache::ParticleDynamicCache,
 )
