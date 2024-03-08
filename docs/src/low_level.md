@@ -49,3 +49,20 @@ The full reference is:
 ```@docs
 ConsensusBasedX.ConsensusBasedOptimisationCache
 ```
+
+## `ConsensusBasedSampling`
+
+The `ConsensusBasedSampling` struct (of type `CBXMethod`) defines the details of the *consensus-based sampling method* (function evaluations, covariance matrix...).
+
+```@docs
+ConsensusBasedX.ConsensusBasedSampling
+```
+
+### `ConsensusBasedSamplingCache`
+
+`ConsensusBasedSampling` requires a cache, `ConsensusBasedSamplingCache` (of type `CBXMethodCache`). This can be constructed with [`ConsensusBasedX.construct_method_cache`](@ref).
+
+The full reference is:
+```@docs
+ConsensusBasedX.ConsensusBasedSamplingCache
+```

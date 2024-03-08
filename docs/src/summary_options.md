@@ -38,3 +38,7 @@ See [Stopping criteria](@ref).
 - `extended_output::Bool = false` controls the output, and by default returns only the computed minimiser. `extended_output = true` returns additional information, see [Extended output](@ref).
 - `parallelisation = :NoParallelisation` controls the parallelisation of the `minimise` routine, switched off by default. `parallelisation=:EnsembleParallelisation` enables parallelisation, see  [Parallelisation](@ref).
 - `verbosity::Int = 0` is the verbosity level. `verbosity = 0` produces no output to console. `verbosity = 1` produces some output. 
+
+## Consensus-based sampling options
+
+- `CBS_mode = :sampling` controls the mode of consensus-based sampling. If you want to perform a minimisation, pass `CBS_mode = :minimise` instead.

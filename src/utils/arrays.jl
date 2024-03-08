@@ -81,12 +81,10 @@ function deep_zero(x::AbstractArray)
   return y
 end
 
-nested_zeros(type::Type, dim::Int) = zeros(type, dim)
+nested_zeros(type::Type, dim) = zeros(type, dim)
 
-function nested_zeros(type::Type, dim::Int, dim2::Int)
-  return [zeros(type, dim2) for k ∈ 1:dim]
-end
+nested_zeros(type::Type, dim::Int, dim2) = [zeros(type, dim2) for k ∈ 1:dim]
 
-function nested_zeros(type::Type, dim::Int, dim2::Int, dim3::Int)
+function nested_zeros(type::Type, dim::Int, dim2::Int, dim3)
   return [zeros(type, dim2, dim3) for k ∈ 1:dim]
 end

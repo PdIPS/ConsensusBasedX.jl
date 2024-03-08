@@ -42,7 +42,7 @@ function compute_CBO_update!(
   particle_dynamic_cache::ParticleDynamicCache,
   m::Int,
 ) where {TF, TCorrection}
-  @expand particle_dynamic_cache D N X dX Δt root2Δt
+  @expand particle_dynamic_cache D N X dX Δt root_2Δt
   @expand method correction λ σ
   @expand method_cache consensus consensus_energy distance energy
 
@@ -59,7 +59,7 @@ function compute_CBO_update!(
         λ *
         (consensus[m][d] - X[m][n][d]) *
         correction(energy[m][n] - consensus_energy[m]) +
-        root2Δt * σ * distance[m][n] * randn()
+        root_2Δt * σ * distance[m][n] * randn()
     end
   end
   return nothing
@@ -72,7 +72,7 @@ function compute_CBO_update!(
   particle_dynamic_cache::ParticleDynamicCache,
   m::Int,
 ) where {TF, TCorrection}
-  @expand particle_dynamic_cache D N X dX Δt root2Δt
+  @expand particle_dynamic_cache D N X dX Δt root_2Δt
   @expand method correction λ σ
   @expand method_cache consensus consensus_energy energy
 
@@ -81,7 +81,7 @@ function compute_CBO_update!(
       dX[m][n][d] =
         (consensus[m][d] - X[m][n][d]) * (
           Δt * λ * correction(energy[m][n] - consensus_energy[m]) +
-          root2Δt * σ * randn()
+          root_2Δt * σ * randn()
         )
     end
   end

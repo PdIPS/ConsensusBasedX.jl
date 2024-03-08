@@ -49,7 +49,6 @@ Full-code examples are provided for the [keyword](https://github.com/PdIPS/Conse
 
 ## Method reference
 
-
 ```@index
 Pages = ["function_minimisation.md"]
 ```
