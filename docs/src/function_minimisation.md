@@ -41,6 +41,8 @@ or
 config = (; D = 2)
 maximise(f, config)
 ```
+`maximise` will attempt to define `g(x) = -f(x)` and call `minimise(g, config)`.
+
 
 Full-code examples are provided for the [keyword](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/basic_usage/maximise_with_keywords.jl) and [config](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/basic_usage/maximise_with_config.jl) approaches.
 
