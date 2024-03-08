@@ -29,6 +29,8 @@ using Reexport
   ..construct_particle_dynamic,
   ..construct_particle_dynamic_cache,
   ..finalise_dynamic!,
+  ..forced_convert_2_NamedTuple,
+  ..get_val,
   ..initialise_particles,
   ..initialise_particle_dynamic_cache!,
   ..initialise_dynamic!,
