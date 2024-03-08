@@ -1,40 +1,25 @@
-using ConsensusBasedX, Test
+using ConsensusBasedX, ConsensusBasedX.ConsensusBasedXLowLevel, Test
 
 function tests()
-  out = @test_nowarn ConsensusBasedX.parse_config((; D = 2))
-  @test haskey(out, :D)
-  @test haskey(out, :N)
-  @test haskey(out, :M)
-  @test haskey(out, :mode)
+  @test_throws ArgumentError parse_config(NamedTuple())
 
-  @test_nowarn ConsensusBasedX.check_config_has_D((; D = 2, N = 20))
-  @test_throws ArgumentError ConsensusBasedX.check_config_has_D((; N = 20))
+  @test_throws ArgumentError parse_config((; D = 2, mode = "wrongMode"))
+  @test_throws ArgumentError parse_config((; D = 2, mode = :wrongMode))
+  @test_throws ArgumentError parse_config((; D = 2, mode = 1.0))
 
-  @test_nowarn ConsensusBasedX.parse_config_mode(NamedTuple())
+  @test_throws ArgumentError parse_config((; D = 2, noise = "wrongNoise"))
+  @test_throws ArgumentError parse_config((; D = 2, noise = :wrongNoise))
+  @test_throws ArgumentError parse_config((; D = 2, noise = 1.0))
 
-  out = @test_nowarn ConsensusBasedX.parse_config_mode((;
-    mode = ConsensusBasedX.ParticleMode
+  @test_throws ArgumentError parse_config((;
+    D = 2,
+    parallelisation = "wrongParallelisation",
   ))
-  @test out.mode isa ConsensusBasedX.TParticleMode
-  out = @test_nowarn ConsensusBasedX.parse_config_mode((;
-    mode = Val(:ParticleMode)
+  @test_throws ArgumentError parse_config((;
+    D = 2,
+    parallelisation = :wrongParallelisation,
   ))
-  @test out.mode isa ConsensusBasedX.TParticleMode
-  out = @test_nowarn ConsensusBasedX.parse_config_mode((; mode = :ParticleMode))
-  @test out.mode isa ConsensusBasedX.TParticleMode
-  out =
-    @test_nowarn ConsensusBasedX.parse_config_mode((; mode = "ParticleMode"))
-  @test out.mode isa ConsensusBasedX.TParticleMode
-
-  @test_throws ArgumentError ConsensusBasedX.parse_config_mode((;
-    mode = Val(:WrongMode)
-  ))
-  @test_throws ArgumentError ConsensusBasedX.parse_config_mode((;
-    mode = :WrongMode
-  ))
-  @test_throws ArgumentError ConsensusBasedX.parse_config_mode((;
-    mode = "WrongMode"
-  ))
+  @test_throws ArgumentError parse_config((; D = 2, parallelisation = 1.0))
 end
 
 tests()

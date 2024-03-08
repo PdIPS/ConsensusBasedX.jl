@@ -16,19 +16,14 @@ Attempts to define `x -> -f(x)` and calls the `minimise` routine. This might be 
 See also [`minimise`](@ref).
 """
 function maximise(f, config::NamedTuple)
-  if haskey(config, :mode)
-    if !(config.mode isa TParticleMode)
-      explanation =
-        "ConsensusBasedX.jl cannot define the function `x -> -f(x)` in mode `" *
-        string(get_val(config.mode)) *
-        "`. You should define the function yourself and call `minimise` instead."
-      throw(ArgumentError(explanation))
-    end
-  end
-  g(x) = -f(x)
-  return minimise(g, config)
+  return maximise_with_parsed_config(parse_config(config), f)
 end
 export maximise
+
+function maximise_with_parsed_config(config::NamedTuple, f)
+  g(x) = -f(x)
+  return minimise_with_parsed_config(config, g)
+end
 
 const maximize = maximise
 export maximize
