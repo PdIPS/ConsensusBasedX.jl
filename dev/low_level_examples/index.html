@@ -7,7 +7,9 @@ f(x) = ConsensusBasedX.Ackley(x, shift = 1)
 X₀ = [[rand(config.D) for n ∈ 1:(config.N)] for m ∈ 1:(config.M)]
 
 correction = HeavisideCorrection()
-method = ConsensusBasedOptimisation(f, correction, config.α, config.λ, config.σ)
+noise = IsotropicNoise
+method =
+  ConsensusBasedOptimisation(f, correction, noise, config.α, config.λ, config.σ)
 
 Δt = 0.1
 particle_dynamic = ParticleDynamic(method, Δt)
@@ -22,7 +24,9 @@ initialise_dynamic!(particle_dynamic, particle_dynamic_cache)
 compute_dynamic!(particle_dynamic, particle_dynamic_cache)
 finalise_dynamic!(particle_dynamic, particle_dynamic_cache)
 
-out = wrap_output(X₀, particle_dynamic, particle_dynamic_cache)</code></pre><p><a href="https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/low_level/low_level.jl">Full-code example</a>.</p><h2 id="Manual-stepping"><a class="docs-heading-anchor" href="#Manual-stepping">Manual stepping</a><a id="Manual-stepping-1"></a><a class="docs-heading-anchor-permalink" href="#Manual-stepping" title="Permalink"></a></h2><p>This bypasses the <code>compute_dynamic!</code> method, performing the stepping manually instead:</p><pre><code class="language-julia hljs">config =
+out = wrap_output(X₀, particle_dynamic, particle_dynamic_cache)
+
+@show out.minimiser</code></pre><p><a href="https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/low_level/low_level.jl">Full-code example</a>.</p><h2 id="Manual-stepping"><a class="docs-heading-anchor" href="#Manual-stepping">Manual stepping</a><a id="Manual-stepping-1"></a><a class="docs-heading-anchor-permalink" href="#Manual-stepping" title="Permalink"></a></h2><p>This bypasses the <code>compute_dynamic!</code> method, performing the stepping manually instead:</p><pre><code class="language-julia hljs">config =
   (; D = 2, N = 20, M = 1, α = 10.0, λ = 1.0, σ = 1.0, Δt = 0.1, verbosity = 0)
 
 f(x) = ConsensusBasedX.Ackley(x, shift = 1)
@@ -30,7 +34,9 @@ f(x) = ConsensusBasedX.Ackley(x, shift = 1)
 X₀ = [[rand(config.D) for n ∈ 1:(config.N)] for m ∈ 1:(config.M)]
 
 correction = HeavisideCorrection()
-method = ConsensusBasedOptimisation(f, correction, config.α, config.λ, config.σ)
+noise = IsotropicNoise
+method =
+  ConsensusBasedOptimisation(f, correction, noise, config.α, config.λ, config.σ)
 
 Δt = 0.1
 particle_dynamic = ParticleDynamic(method, Δt)
@@ -51,4 +57,6 @@ end
 
 finalise_dynamic!(particle_dynamic, particle_dynamic_cache)
 
-out = wrap_output(X₀, particle_dynamic, particle_dynamic_cache)</code></pre><p><a href="https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/low_level/manual_stepping.jl">Full-code example</a>.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../low_level/">« Low-level interface</a><a class="docs-footer-nextpage" href="../summary_options/">Summary of options »</a><div class="flexbox-break"></div><p class="footer-message">Copyright © 2024 <a href="https://rafaelbailo.com/">Dr Rafael Bailo</a> and <a href="https://github.com/PdIPS">Purpose-Driven Interacting Particle Systems Group</a>. <a href="https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/LICENSE">MIT License</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.3.0 on <span class="colophon-date" title="Thursday 7 March 2024 16:58">Thursday 7 March 2024</span>. Using Julia version 1.10.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+out = wrap_output(X₀, particle_dynamic, particle_dynamic_cache)
+
+@show out.minimiser</code></pre><p><a href="https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/low_level/manual_stepping.jl">Full-code example</a>.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../low_level/">« Low-level interface</a><a class="docs-footer-nextpage" href="../summary_options/">Summary of options »</a><div class="flexbox-break"></div><p class="footer-message">Copyright © 2024 <a href="https://rafaelbailo.com/">Dr Rafael Bailo</a> and <a href="https://github.com/PdIPS">Purpose-Driven Interacting Particle Systems Group</a>. <a href="https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/LICENSE">MIT License</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.3.0 on <span class="colophon-date" title="Friday 8 March 2024 12:41">Friday 8 March 2024</span>. Using Julia version 1.10.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
