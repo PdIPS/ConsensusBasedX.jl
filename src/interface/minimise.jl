@@ -15,24 +15,22 @@ You must specify the dimension `D` of the problem. Other paramters (e.g. the num
 
 # Examples
 
-```julia-repl
-julia> minimise(f, D = 2)
-
+```julia
+minimise(f, D = 2)
 ```
 
-```julia-repl
-julia> minimise(f, config)
+```julia
 config = (; D = 2);
+minimise(f, config)
 ```
 
-```julia-repl
-julia> minimise(f, D = 2, N = 20)
-
+```julia
+minimise(f, D = 2, N = 20)
 ```
 
-```julia-repl
-julia> minimise(f, config)
+```julia
 config = (; D = 2, N = 20);
+minimise(f, config)
 ```
 """
 function minimise(f, config::NamedTuple)
@@ -46,7 +44,7 @@ export minimise
   X₀ = initialise_particles(config)
   parsed_X₀ = reshape(X₀, mode)
 
-  particle_dynamic = get_particle_dynamic(config, f)
+  particle_dynamic = get_minimise_particle_dynamic(config, f)
 
   particle_dynamic_cache =
     construct_particle_dynamic_cache(config, parsed_X₀, particle_dynamic)
@@ -59,13 +57,9 @@ export minimise
   )
 end
 
-@config function get_particle_dynamic(f)
+@config function get_minimise_particle_dynamic(f)
   @verb " • Constructing dynamic"
-
-  # correction = NoCorrection()
   correction = HeavisideCorrection()
-  # correction = RegularisedHeavisideCorrection(1e-3)
-
   method = construct_CBO(config, f, correction, config.noise)
   particle_dynamic = construct_particle_dynamic(config, method)
   return particle_dynamic

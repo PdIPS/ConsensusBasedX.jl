@@ -22,6 +22,7 @@ include("./interface/maximise.jl")
 include("./interface/minimise.jl")
 include("./interface/optimise.jl")
 include("./interface/parse_config.jl")
+include("./interface/sample.jl")
 
 include("./dynamics/ParticleDynamics.jl")
 include("./dynamics/benchmark_dynamic.jl")
@@ -32,6 +33,9 @@ include("./CBO/CBO.jl")
 include("./CBO/CBO_method.jl")
 include("./CBO/corrections.jl")
 include("./CBO/is_method_pending.jl")
+
+include("./CBS/CBS.jl")
+include("./CBS/CBS_method.jl")
 
 include("./ConsensusBasedXLowLevel.jl")
 export ConsensusBasedXLowLevel

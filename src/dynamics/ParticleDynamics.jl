@@ -36,8 +36,8 @@ Fields:
   - `X`, the particle array.
   - `dX`, the time derivative array.
   - `Δt::Float64`, the time step.
-  - `rootΔt::Float64`, the square root of the time step.
-  - `root2Δt::Float64`, the square root of twice the time step.
+  - `root_Δt::Float64`, the square root of the time step.
+  - `root_2Δt::Float64`, the square root of twice the time step.
   - `max_iterations::Float64`, the maximum number of iterations.
   - `max_time::Float64`, the maximal time.
   - `iteration::Vector{Int}`, the vector containing the iteration count per ensemble.
@@ -61,8 +61,8 @@ mutable struct ParticleDynamicCache{
   dX::TdX
 
   Δt::Float64
-  rootΔt::Float64
-  root2Δt::Float64
+  root_Δt::Float64
+  root_2Δt::Float64
 
   max_iterations::Float64
   max_time::Float64
@@ -89,8 +89,8 @@ end
   X = deep_zero(X₀)
   dX = deep_zero(X₀)
   Δt = 0.0
-  rootΔt = 0.0
-  root2Δt = 0.0
+  root_Δt = 0.0
+  root_2Δt = 0.0
 
   iteration = zeros(Int, M)
 
@@ -111,8 +111,8 @@ end
     X,
     dX,
     Δt,
-    rootΔt,
-    root2Δt,
+    root_Δt,
+    root_2Δt,
     float(max_iterations),
     float(max_time),
     iteration,
@@ -148,7 +148,7 @@ function initialise_particle_dynamic_cache!(
   @expand particle_dynamic_cache M iteration
 
   deep_copyto!(particle_dynamic_cache.X, X₀)
-  set_Δt!(particle_dynamic_cache, particle_dynamic.Δt)
+  set_Δt!(particle_dynamic, particle_dynamic_cache, particle_dynamic.Δt)
   for m ∈ 1:M
     iteration[m] = 0
   end
@@ -163,16 +163,28 @@ function initialise_particle_dynamic_cache!(
   return nothing
 end
 
-function set_Δt!(particle_dynamic_cache::ParticleDynamicCache, Δt::Real)
+function set_Δt!(
+  particle_dynamic::ParticleDynamic,
+  particle_dynamic_cache::ParticleDynamicCache,
+  Δt::Real,
+)
   particle_dynamic_cache.Δt = Δt
-  particle_dynamic_cache.rootΔt = sqrt(Δt)
-  particle_dynamic_cache.root2Δt = sqrt(2) * particle_dynamic_cache.rootΔt
-  set_Δt!(particle_dynamic_cache.method_cache, particle_dynamic_cache, Δt)
+  particle_dynamic_cache.root_Δt = sqrt(Δt)
+  particle_dynamic_cache.root_2Δt = sqrt(2) * particle_dynamic_cache.root_Δt
+  set_Δt!(
+    particle_dynamic.method,
+    particle_dynamic_cache.method_cache,
+    particle_dynamic,
+    particle_dynamic_cache,
+    Δt,
+  )
   return nothing
 end
 
 function set_Δt!(
+  method::CBXMethod,
   method_cache::CBXMethodCache,
+  particle_dynamic::ParticleDynamic,
   particle_dynamic_cache::ParticleDynamicCache,
   Δt::Real,
 )

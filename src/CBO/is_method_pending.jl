@@ -1,6 +1,6 @@
 function is_method_pending(
-  method::ConsensusBasedOptimisation,
-  method_cache::ConsensusBasedOptimisationCache,
+  method::CBXMethod,
+  method_cache::CBXMethodCache,
   particle_dynamic::ParticleDynamic,
   particle_dynamic_cache::ParticleDynamicCache,
   m::Int,
@@ -39,8 +39,8 @@ function is_method_pending(
 end
 
 function is_method_pending_energy_threshold(
-  method::ConsensusBasedOptimisation,
-  method_cache::ConsensusBasedOptimisationCache,
+  method::CBXMethod,
+  method_cache::CBXMethodCache,
   particle_dynamic::ParticleDynamic,
   particle_dynamic_cache::ParticleDynamicCache,
   m::Int,
@@ -50,8 +50,8 @@ function is_method_pending_energy_threshold(
 end
 
 function is_method_pending_energy_tolerance(
-  method::ConsensusBasedOptimisation,
-  method_cache::ConsensusBasedOptimisationCache,
+  method::CBXMethod,
+  method_cache::CBXMethodCache,
   particle_dynamic::ParticleDynamic,
   particle_dynamic_cache::ParticleDynamicCache,
   m::Int,
@@ -62,8 +62,8 @@ function is_method_pending_energy_tolerance(
 end
 
 function is_method_pending_max_evaluations(
-  method::ConsensusBasedOptimisation,
-  method_cache::ConsensusBasedOptimisationCache,
+  method::CBXMethod,
+  method_cache::CBXMethodCache,
   particle_dynamic::ParticleDynamic,
   particle_dynamic_cache::ParticleDynamicCache,
   m::Int,

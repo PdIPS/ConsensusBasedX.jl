@@ -30,6 +30,7 @@ makedocs(;
     "Home" => "index.md",
     "Basic usage" => [
       "Function minimisation" => "function_minimisation.md"
+      "Distribution sampling" => "distribution_sampling.md"
       "Method parameters" => "method_parameters.md"
       "Stopping criteria" => "stopping_criteria.md"
       "Particle initialisation" => "particle_initialisation.md"

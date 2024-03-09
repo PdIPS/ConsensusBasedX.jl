@@ -1,4 +1,4 @@
-for routine ∈ (:minimise, :maximise)
+for routine ∈ (:minimise, :maximise, :sample)
   @eval begin
     function $routine(f; kw...)
       config = NamedTuple(kw)

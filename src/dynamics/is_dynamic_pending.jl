@@ -42,13 +42,3 @@ function is_dynamic_pending_max_time(
   @expand particle_dynamic_cache iteration max_time
   return iteration[m] * Δt < max_time
 end
-
-function is_method_pending(
-  method::CBXMethod,
-  method_cache::CBXMethodCache,
-  particle_dynamic::ParticleDynamic,
-  particle_dynamic_cache::ParticleDynamicCache,
-  m::Int,
-)
-  return true, "method_pending"
-end
