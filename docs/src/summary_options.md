@@ -42,3 +42,4 @@ See [Stopping criteria](@ref).
 ## Consensus-based sampling options
 
 - `CBS_mode = :sampling` controls the mode of consensus-based sampling. If you want to perform a minimisation, pass `CBS_mode = :minimise` instead.
+- `root = :SymmetricRoot` controls the type of root-covariance matrix, see [Root-covariance types](@ref).

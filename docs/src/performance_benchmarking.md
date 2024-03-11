@@ -20,3 +20,6 @@ This will run the beginning of the `minimise` routine as normal, creating the re
 
 !!! tip
     The benchmark mode reports zero allocations with all the [Example objectives](@ref) provided by ConsensusBasedX.jl. [Full-code example](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/advanced_usage/benchmark.jl). Wherever possible, your function should also lead to zero allocations.
+
+!!! warning
+    If you are running [Consensus-Based Sampling](@ref) by calling `sample`, allocations might occur whenever the `root = :SymmetricRoot` is automatically selected (see [Root-covariance types](@ref)). To have zero allocations, you must run with the option `root = :AsymmetricRoot`. Nevertheless, despite the allocations, the `root = :SymmetricRoot` option offers better performance when `N` is large (roughly if `N > 10 * D`).

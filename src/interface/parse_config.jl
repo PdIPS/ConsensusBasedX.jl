@@ -12,6 +12,7 @@ function parse_config(config::NamedTuple)
   config = parse_config_default(config)
   config = parse_config_mode(config)
   config = parse_config_noise(config)
+  config = parse_config_root(config)
   config = parse_config_parallelisation(config)
   return config
 end
@@ -60,6 +61,25 @@ function parse_config_noise(config::NamedTuple)
       throw(ArgumentError(explanation))
     end
     return merge(config, (; noise))
+  end
+  return config
+end
+
+function parse_config_root(config::NamedTuple)
+  if (haskey(config, :root))
+    root = config.root
+    root = (root isa String) ? Symbol(root) : root
+    root = (root isa Symbol) ? Val(root) : root
+    if root isa Val
+      if !(root isa Roots)
+        explanation = "The selected `root` is not recognised as an instance of `ConsensusBasedX.Roots`."
+        throw(ArgumentError(explanation))
+      end
+    else
+      explanation = "The keyword `root` should be a `Symbol`, a `String`, or an instance of `ConsensusBasedX.Roots`."
+      throw(ArgumentError(explanation))
+    end
+    return merge(config, (; root))
   end
   return config
 end

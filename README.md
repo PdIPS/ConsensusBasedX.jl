@@ -9,39 +9,32 @@
 [![Aqua](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**ConsensusBasedX.jl** is a gradient-free stochastic optimisation package for Julia, born out of [Consensus.jl](https://github.com/rafaelbailo/Consensus.jl) and [CBXpy](https://github.com/PdIPS/CBXpy). It uses _Consensus-Based Optimisation_ (CBO), a flavour of _Particle Swarm Optimisation_ (PSO) first introduced by [R. Pinnau, C. Totzeck, O. Tse, and S. Martin (2017)][1]. This is a method of global optimisation particularly suited for rough functions, where gradient descent would fail. It is also useful for optimisation in higher dimensions.
+**ConsensusBasedX.jl** is a gradient-free stochastic optimisation package for Julia, born out of [Consensus.jl](https://github.com/rafaelbailo/Consensus.jl) and [CBXpy](https://github.com/PdIPS/CBXpy). It uses _Consensus-Based Optimisation_ (CBO), a flavour of _Particle Swarm Optimisation_ (PSO) first introduced by [R. Pinnau, C. Totzeck, O. Tse, and S. Martin (2017)][1]. This is a method of global optimisation particularly suited for rough functions, where gradient descent would fail. It is also useful for optimisation in higher dimensions. It also implements _Consensus-Based Sampling_ (CBS), as introduced in [J. A. Carrillo, F. Hoffmann, A. M. Stuart, and U. Vaes (2022)][2].
 
 
-## Basic Usage
+## Basic minimisation
 
-The main functionality of ConsensusBasedX.jl is function minimisation. It assumes you have defined a function `f(x::AbstractVector)` that takes a single vector argumemt `x` of length `D = length(x)`.
+The main functionality of ConsensusBasedX.jl is function minimisation via CBO. It assumes you have defined a function `f(x::AbstractVector)` that takes a single vector argumemt `x` of length `D = length(x)`.
 
 For instance, if `D = 2`, you can minimise `f` by running:
 ```julia
 minimise(f, D = 2)
 ```
 
+## Basic sampling
+
+ConsensusBasedX.jl also provides CBS. The package exports `sample`, which behaves exactly as `minimise`.
+
+For instance, if `D = 2`, you can sample `exp(-αf)` by running:
+```julia
+out = sample(f, D = 2, extended_output=true)
+out.sample
+```
+
 For more detailed explanations and full-code examples, see the [documentation](https://PdIPS.github.io/ConsensusBasedX.jl/stable/).
 
-
-## Consensus-Based Optimisation
-
-Consensus-based optimisation uses *particles* to minimise a function $f(x)$. The particles evolve following a stochastic differential equation:
-```math
-\mathrm{d}X_i(t) = -\lambda \left( X_i(t) - V(t) \right) H \left[ f(X_i(t)) - f(V(t)) \right] \mathrm{d}t + \sqrt{2} \sigma \left| X_i(t) - V(t) \right| \mathrm{d}W_i(t),
-```
-where ``W_i`` are independent Brownian processes, and where
-```math
-V(t) = \frac{
-\sum\limits_{i} X_i(t) \exp(-\alpha f(X_i(t)))
-}{
-\sum\limits_{i} \exp(-\alpha f(X_i(t)))
-},
-```
-is a weighted average of the particle's positions called the **consensus point**. $\lambda$, $\sigma$, and $\alpha$ are given positive parameters.
-
 [1]: http://dx.doi.org/10.1142/S0218202517400061
-
+[2]: https://onlinelibrary.wiley.com/doi/10.1111/sapm.12470
 
 *Copyright © 2024 [Dr Rafael Bailo](https://rafaelbailo.com/) and [Purpose-Driven Interacting Particle Systems Group](https://github.com/PdIPS). [MIT License](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/LICENSE).*
 

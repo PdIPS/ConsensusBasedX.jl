@@ -7,6 +7,7 @@ Fields:
 
   - `f`, the objective function.
   - `correction<:CBXCorrection`, a correction term.
+  - `noise<:Noises`, a noise mode.
   - `α::Float64`, the exponential weight parameter.
   - `λ::Float64`, the drift strengh.
   - `σ::Float64`, the noise strengh.

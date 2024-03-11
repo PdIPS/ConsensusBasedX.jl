@@ -1,15 +1,23 @@
 # Noise types
 
-By default, ConsensusBasedX.jl uses so-called *isotropic noise* (option `noise = :IsotropicNoise`), given by
+## Isotropic noise
+
+By default, [Consensus-Based Optimisation](@ref) uses so-called *isotropic noise* (option `noise = :IsotropicNoise`), given by
 ```math
-\mathrm{d}X_i(t) = \cdots + \sqrt{2} \sigma \left| X_i(t) - V(t) \right| \mathrm{d}W_i(t),
+\mathrm{d}x_t^i =
+\cdots
++ \sqrt{2\sigma^2} 
+\left\| x_t^i - c_\alpha(x_t) \right\| \mathrm{d}B_t^i,
 ```
-where ``W_i`` are independent Brownian processes. The intensity of the noise depends on the distance of each particle to the consensus point, ``\left| X_i(t) - V(t) \right|``. [Full-code example](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/advanced_usage/isotropic_noise.jl).
+where ``B_t^i`` are independent Brownian motions in ``D`` dimensions. The intensity of the noise depends on the distance of each particle to the consensus point, ``\left\| x_t^i - c_\alpha(x_t) \right\|``. [Full-code example](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/advanced_usage/isotropic_noise.jl).
 
 ## Anisotropic noise
 
 ConsensusBasedX.jl also offers *anisotropic noise*, given by 
 ```math
-\mathrm{d}X_i(t) = \cdots + \sqrt{2} \sigma \,\mathrm{diag} \left( X_i(t) - V(t) \right) \mathrm{d}W_i(t).
+\mathrm{d}x_t^i =
+\cdots
++ \sqrt{2\sigma^2} 
+\operatorname*{diag} \left( x_t^i - c_\alpha(x_t) \right) \mathrm{d}B_t^i,
 ```
 The intensity of the noise now varies along each dimension. This can be selected with the option `noise = :AnisotropicNoise`. [Full-code example](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/advanced_usage/anisotropic_noise.jl).

@@ -3,6 +3,7 @@ module ConsensusBasedXLowLevel
 using Reexport
 
 @reexport import ..AnisotropicNoise,
+  ..AsymmetricRoot,
   ..CBXMethod,
   ..CBXMethodCache,
   ..ConsensusBasedOptimisation,
@@ -17,11 +18,13 @@ using Reexport
   ..ParticleDynamicCache,
   ..ParticleMode,
   ..RegularisedHeavisideCorrection,
+  ..SymmetricRoot,
   ..TParticleMode
 
 @reexport import ..Ackley,
   ..Rastrigin,
   ..Quadratic,
+  ..auto_select_root_mode,
   ..compute_dynamic!,
   ..compute_dynamic_step!,
   ..construct_CBO,
