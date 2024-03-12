@@ -1,4 +1,4 @@
-using ConsensusBasedX, ConsensusBasedX.ConsensusBasedXPlots
+using ConsensusBasedX, ConsensusBasedXPlots
 
 f(x) = ConsensusBasedX.Ackley(x, shift = 1)
 

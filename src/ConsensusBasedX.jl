@@ -40,7 +40,5 @@ include("./CBS/CBS_method.jl")
 
 include("./ConsensusBasedXLowLevel.jl")
 export ConsensusBasedXLowLevel
-include("./ConsensusBasedXPlots.jl")
-export ConsensusBasedXPlots
 
 end
