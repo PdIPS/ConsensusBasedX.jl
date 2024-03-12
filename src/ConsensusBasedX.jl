@@ -7,6 +7,7 @@ include("./types/abstract.jl")
 include("./types/modes.jl")
 include("./types/noise.jl")
 include("./types/parallelisation.jl")
+include("./types/roots.jl")
 
 include("./utils/arrays.jl")
 include("./utils/logging.jl")

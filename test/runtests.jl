@@ -11,6 +11,8 @@ using SafeTestsets, Test
     "interface/maximise",
     "interface/minimise",
     "interface/parse_config",
+    "interface/sample",
+    "tuples/tuples",
     "tuples/types",
     "aqua",
     "examples",

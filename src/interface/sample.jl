@@ -7,7 +7,7 @@ sample(f; keywords...)
 sample(f, config::NamedTuple)
 ```
 
-Sample the distribution `exp(f)` using Consensus-Based Sampling (see [Distribution sampling](@ref)).
+Sample the distribution `exp(-αf)` using Consensus-Based Sampling (see [Distribution sampling](@ref)).
 
 You must specify the dimension `D` of the problem. Other paramters (e.g. the number of particles `N` or the number of ensembles `M` can also be specified; see [Summary of options](@ref).
 

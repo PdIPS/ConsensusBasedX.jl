@@ -6,17 +6,27 @@ ConsensusBasedSampling
 Fields:
 
   - `f`, the objective function.
+  - `root<:Roots`, a mode for the square toor of the covariance.
   - `α::Float64`, the exponential weight parameter.
   - `λ::Float64`, the mode parameter. `λ = 1 / (1 + α)` corresponds to `CBS_mode = :sampling`, and `λ = 1` corresponds to `CBS_mode = :minimise`.
 """
-mutable struct ConsensusBasedSampling{TF} <: CBXMethod
+mutable struct ConsensusBasedSampling{TF, TRoot <: Roots} <: CBXMethod
   f::TF
+  root::TRoot
   α::Float64
   λ::Float64
 end
 
-@config function construct_CBS(f; α::Real = 10, CBS_mode = :sampling)
+@config function construct_CBS(
+  f;
+  D,
+  N,
+  α::Real = 10,
+  CBS_mode = :sampling,
+  root = auto_select_root_mode(D, N),
+)
   @assert α >= 0
+
   if Symbol(CBS_mode) == :sampling
     λ = 1 / (1 + α)
   elseif Symbol(CBS_mode) in
@@ -26,7 +36,8 @@ end
     explanation = "`CBS_mode` should be either `:sampling` or `:minimise`."
     throw(ArgumentError(explanation))
   end
-  return ConsensusBasedSampling(f, float(α), float(λ))
+
+  return ConsensusBasedSampling(f, root, float(α), float(λ))
 end
 
 """
@@ -96,14 +107,20 @@ end
   energy = nested_zeros(type, M, N)
   exponents = nested_zeros(type, M, N)
   logsums = nested_zeros(type, M)
-  noise = nested_zeros(type, M, D)
-  root_covariance = nested_zeros(type, M, (D, D))
   weights = nested_zeros(type, M, N)
 
   evaluations = zeros(Int, M)
 
   exp_minus_Δt = 0.0
   noise_factor = 0.0
+
+  if method.root isa TSymmetricRoot
+    noise = nested_zeros(type, M, D)
+    root_covariance = nested_zeros(type, M, (D, D))
+  elseif method.root isa TAsymmetricRoot
+    noise = nested_zeros(type, M, N)
+    root_covariance = nested_zeros(type, M, (D, N))
+  end
 
   method_cache = ConsensusBasedSamplingCache{type}(
     consensus,

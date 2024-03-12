@@ -28,6 +28,10 @@ makedocs(;
   ),
   pages = [
     "Home" => "index.md",
+    "Mathematical background" => [
+      "Consensus-based optimisation" => "consensus-based_optimisation.md"
+      "Consensus-based sampling" => "consensus-based_sampling.md"
+    ],
     "Basic usage" => [
       "Function minimisation" => "function_minimisation.md"
       "Distribution sampling" => "distribution_sampling.md"
@@ -38,6 +42,7 @@ makedocs(;
     ],
     "Mid-level usage" => [
       "Noise types" => "noise_types.md"
+      "Root-covariance types" => "root-covariance_types.md"
       "Extended output" => "extended_output.md"
       "Output visualisation" => "output_visualisation.md"
       "Performance and benchmarking" => "performance_benchmarking.md"
