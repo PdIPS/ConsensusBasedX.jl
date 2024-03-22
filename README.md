@@ -2,6 +2,7 @@
 
 # ConsensusBasedX.jl: Consensus-Based Optimisation in Julia
 
+[![status](https://joss.theoj.org/papers/008799348e8232eb9fe8180712e2dfb8/status.svg)](https://joss.theoj.org/papers/008799348e8232eb9fe8180712e2dfb8)
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://PdIPS.github.io/ConsensusBasedX.jl/stable/)
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://PdIPS.github.io/ConsensusBasedX.jl/dev/)
 [![Build Status](https://github.com/PdIPS/ConsensusBasedX.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/PdIPS/ConsensusBasedX.jl/actions/workflows/CI.yml?query=branch%3Amain)
