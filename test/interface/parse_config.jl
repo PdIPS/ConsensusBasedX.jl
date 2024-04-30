@@ -3,6 +3,8 @@ using ConsensusBasedX, ConsensusBasedX.ConsensusBasedXLowLevel, Test
 function tests()
   @test_throws ArgumentError parse_config(NamedTuple())
 
+  @test_nowarn parse_config((; D = 2))
+
   @test_throws ArgumentError parse_config((; D = 2, mode = "wrongMode"))
   @test_throws ArgumentError parse_config((; D = 2, mode = :wrongMode))
   @test_throws ArgumentError parse_config((; D = 2, mode = 1.0))
@@ -10,6 +12,10 @@ function tests()
   @test_throws ArgumentError parse_config((; D = 2, noise = "wrongNoise"))
   @test_throws ArgumentError parse_config((; D = 2, noise = :wrongNoise))
   @test_throws ArgumentError parse_config((; D = 2, noise = 1.0))
+
+  @test_throws ArgumentError parse_config((; D = 2, root = "wrongRoot"))
+  @test_throws ArgumentError parse_config((; D = 2, root = :wrongRoot))
+  @test_throws ArgumentError parse_config((; D = 2, root = 1.0))
 
   @test_throws ArgumentError parse_config((;
     D = 2,

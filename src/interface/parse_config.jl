@@ -28,41 +28,35 @@ end
 parse_config_default(config::NamedTuple) = merge(DEFAULT_PARSED_CONFIG, config)
 
 function parse_config_mode(config::NamedTuple)
-  if (haskey(config, :mode))
-    mode = config.mode
-    mode = (mode isa String) ? Symbol(mode) : mode
-    mode = (mode isa Symbol) ? Val(mode) : mode
-    if mode isa Val
-      if !(mode isa Modes)
-        explanation = "The selected `mode` is not recognised as an instance of `ConsensusBasedX.Modes`."
-        throw(ArgumentError(explanation))
-      end
-    else
-      explanation = "The keyword `mode` should be a `Symbol`, a `String`, or an instance of `ConsensusBasedX.Modes`."
+  mode = config.mode
+  mode = (mode isa String) ? Symbol(mode) : mode
+  mode = (mode isa Symbol) ? Val(mode) : mode
+  if mode isa Val
+    if !(mode isa Modes)
+      explanation = "The selected `mode` is not recognised as an instance of `ConsensusBasedX.Modes`."
       throw(ArgumentError(explanation))
     end
-    return merge(config, (; mode))
+  else
+    explanation = "The keyword `mode` should be a `Symbol`, a `String`, or an instance of `ConsensusBasedX.Modes`."
+    throw(ArgumentError(explanation))
   end
-  return config
+  return merge(config, (; mode))
 end
 
 function parse_config_noise(config::NamedTuple)
-  if (haskey(config, :noise))
-    noise = config.noise
-    noise = (noise isa String) ? Symbol(noise) : noise
-    noise = (noise isa Symbol) ? Val(noise) : noise
-    if noise isa Val
-      if !(noise isa Noises)
-        explanation = "The selected `noise` is not recognised as an instance of `ConsensusBasedX.Noises`."
-        throw(ArgumentError(explanation))
-      end
-    else
-      explanation = "The keyword `noise` should be a `Symbol`, a `String`, or an instance of `ConsensusBasedX.Noises`."
+  noise = config.noise
+  noise = (noise isa String) ? Symbol(noise) : noise
+  noise = (noise isa Symbol) ? Val(noise) : noise
+  if noise isa Val
+    if !(noise isa Noises)
+      explanation = "The selected `noise` is not recognised as an instance of `ConsensusBasedX.Noises`."
       throw(ArgumentError(explanation))
     end
-    return merge(config, (; noise))
+  else
+    explanation = "The keyword `noise` should be a `Symbol`, a `String`, or an instance of `ConsensusBasedX.Noises`."
+    throw(ArgumentError(explanation))
   end
-  return config
+  return merge(config, (; noise))
 end
 
 function parse_config_root(config::NamedTuple)
@@ -85,22 +79,19 @@ function parse_config_root(config::NamedTuple)
 end
 
 function parse_config_parallelisation(config::NamedTuple)
-  if (haskey(config, :parallelisation))
-    parallelisation = config.parallelisation
-    parallelisation =
-      (parallelisation isa String) ? Symbol(parallelisation) : parallelisation
-    parallelisation =
-      (parallelisation isa Symbol) ? Val(parallelisation) : parallelisation
-    if parallelisation isa Val
-      if !(parallelisation isa Parallelisations)
-        explanation = "The selected `parallelisation` is not recognised as an instance of `ConsensusBasedX.Parallelisations`."
-        throw(ArgumentError(explanation))
-      end
-    else
-      explanation = "The keyword `parallelisation` should be a `Symbol`, a `String`, or an instance of `ConsensusBasedX.Parallelisations`."
+  parallelisation = config.parallelisation
+  parallelisation =
+    (parallelisation isa String) ? Symbol(parallelisation) : parallelisation
+  parallelisation =
+    (parallelisation isa Symbol) ? Val(parallelisation) : parallelisation
+  if parallelisation isa Val
+    if !(parallelisation isa Parallelisations)
+      explanation = "The selected `parallelisation` is not recognised as an instance of `ConsensusBasedX.Parallelisations`."
       throw(ArgumentError(explanation))
     end
-    return merge(config, (; parallelisation))
+  else
+    explanation = "The keyword `parallelisation` should be a `Symbol`, a `String`, or an instance of `ConsensusBasedX.Parallelisations`."
+    throw(ArgumentError(explanation))
   end
-  return config
+  return merge(config, (; parallelisation))
 end

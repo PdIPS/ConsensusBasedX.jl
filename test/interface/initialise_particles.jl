@@ -1,5 +1,7 @@
 using ConsensusBasedX, Test
 
+import LinearAlgebra
+
 function tests()
   config =
     (; D = 3, N = 2, M = 1, mode = ConsensusBasedX.ParticleMode, verbosity = 0)
@@ -12,6 +14,16 @@ function tests()
   @test_throws ArgumentError ConsensusBasedX.initialise_particles((merge(
     config,
     (; initial_particles = rand(1, 2, 3)),
+  )))
+
+  @test_throws ArgumentError ConsensusBasedX.initialise_particles((merge(
+    config,
+    (; initial_particles = rand(3, 2)),
+  )))
+
+  @test_throws ArgumentError ConsensusBasedX.initialise_particles((merge(
+    config,
+    (; initial_particles = rand(3, 2, 1, 4)),
   )))
 
   X₀ = ConsensusBasedX.initialise_particles((merge(
@@ -48,6 +60,13 @@ function tests()
 
   X₀ = ConsensusBasedX.initialise_particles_uniform(
     merge(config, (; initial_guess = [1, 2, 3], initial_radius = 0.1)),
+  )
+  @test all(map(s -> abs(s - 1) <= 0.1, X₀[1, :, :])) &&
+        all(map(s -> abs(s - 2) <= 0.1, X₀[2, :, :])) &&
+        all(map(s -> abs(s - 3) <= 0.1, X₀[3, :, :]))
+
+  X₀ = ConsensusBasedX.initialise_particles_uniform(
+    merge(config, (; initial_guess = [1, 2, 3], initial_diameter = 0.2)),
   )
   @test all(map(s -> abs(s - 1) <= 0.1, X₀[1, :, :])) &&
         all(map(s -> abs(s - 2) <= 0.1, X₀[2, :, :])) &&
@@ -110,6 +129,16 @@ function tests()
   @test all(map(s -> s == 1, X₀[1, :, :])) &&
         all(map(s -> s == 2, X₀[2, :, :])) &&
         all(map(s -> s == 3, X₀[3, :, :]))
+
+  @test_nowarn ConsensusBasedX.initialise_particles_normal((merge(
+    config,
+    (; initial_mean = [1, 2, 3], initial_covariance = [1 0 0; 0 1 0; 0 0 1]),
+  )))
+
+  @test_throws LinearAlgebra.PosDefException ConsensusBasedX.initialise_particles_normal((merge(
+    config,
+    (; initial_mean = [1, 2, 3], initial_covariance = zeros(3, 3)),
+  )))
 
   X₀ = ConsensusBasedX.initialise_particles_normal((merge(
     config,

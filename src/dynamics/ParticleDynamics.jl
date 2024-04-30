@@ -134,12 +134,6 @@ A constructor helper for `ParticleDynamicCache`. Calls [`ConsensusBasedX.constru
 """
 construct_particle_dynamic_cache
 
-@config construct_method_cache(
-  X₀::AbstractArray,
-  method::CBXMethod,
-  particle_dynamic::ParticleDynamic,
-) = nothing
-
 function initialise_particle_dynamic_cache!(
   X₀::AbstractArray,
   particle_dynamic::ParticleDynamic,
@@ -187,16 +181,6 @@ function set_Δt!(
   particle_dynamic::ParticleDynamic,
   particle_dynamic_cache::ParticleDynamicCache,
   Δt::Real,
-)
-  return nothing
-end
-
-function initialise_method_cache!(
-  X₀::AbstractArray,
-  method::CBXMethod,
-  method_cache::CBXMethodCache,
-  particle_dynamic::ParticleDynamic,
-  particle_dynamic_cache::ParticleDynamicCache,
 )
   return nothing
 end

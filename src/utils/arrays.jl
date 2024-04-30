@@ -10,21 +10,6 @@ end
 
 Base.reshape(x::AbstractArray{<:AbstractArray}, mode::TParticleMode) = x
 
-function reverse_reshape(
-  x::AbstractVector{<:AbstractVector{<:AbstractVector{<:Number}}},
-)
-  M = length(x)
-  N = length(x[1])
-  D = length(x[1][1])
-  return [x[m][n][d] for d ∈ 1:D, n ∈ 1:N, m ∈ 1:M]
-end
-
-function reverse_reshape(x::AbstractVector{<:AbstractMatrix{<:Number}})
-  M = length(x)
-  D, N = size(x[1])
-  return [x[m][d, n] for d ∈ 1:D, n ∈ 1:N, m ∈ 1:M]
-end
-
 function deep_add!(
   dest::AbstractArray{<:Any, N},
   src::AbstractArray{<:Any, N},
@@ -84,7 +69,3 @@ end
 nested_zeros(type::Type, dim) = zeros(type, dim)
 
 nested_zeros(type::Type, dim::Int, dim2) = [zeros(type, dim2) for k ∈ 1:dim]
-
-function nested_zeros(type::Type, dim::Int, dim2::Int, dim3)
-  return [zeros(type, dim2, dim3) for k ∈ 1:dim]
-end

@@ -14,6 +14,7 @@ using SafeTestsets, Test
     "interface/sample",
     "tuples/tuples",
     "tuples/types",
+    "utils/arrays",
     "aqua",
     "examples",
     "format",
