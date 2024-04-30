@@ -13,6 +13,17 @@
 **ConsensusBasedX.jl** is a gradient-free stochastic optimisation package for Julia, born out of [Consensus.jl](https://github.com/rafaelbailo/Consensus.jl) and [CBXpy](https://github.com/PdIPS/CBXpy). It uses _Consensus-Based Optimisation_ (CBO), a flavour of _Particle Swarm Optimisation_ (PSO) first introduced by [R. Pinnau, C. Totzeck, O. Tse, and S. Martin (2017)][1]. This is a method of global optimisation particularly suited for rough functions, where gradient descent would fail. It is also useful for optimisation in higher dimensions. It also implements _Consensus-Based Sampling_ (CBS), as introduced in [J. A. Carrillo, F. Hoffmann, A. M. Stuart, and U. Vaes (2022)][2].
 
 
+## How to install and use
+
+To install ConsensusBasedX.jl, simply run
+```julia
+using Pkg; Pkg.add("ConsensusBasedX")
+```
+in the Julia REPL. You can then load the package in a script or in the REPL by running
+```julia
+using ConsensusBasedX
+```
+
 ## Basic minimisation
 
 The main functionality of ConsensusBasedX.jl is function minimisation via CBO. It assumes you have defined a function `f(x::AbstractVector)` that takes a single vector argumemt `x` of length `D = length(x)`.
@@ -22,9 +33,16 @@ For instance, if `D = 2`, you can minimise `f` by running:
 minimise(f, D = 2)
 ```
 
+Your full code might look like this:
+```julia
+using ConsensusBasedX
+f(x) = x[1]^2 + x[2]^2
+x = minimise(f, D = 2)
+```
+
 ## Basic sampling
 
-ConsensusBasedX.jl also provides CBS. The package exports `sample`, which behaves exactly as `minimise`.
+ConsensusBasedX.jl also provides CBS. The package exports `sample`, which has the same syntax as `minimise`.
 
 For instance, if `D = 2`, you can sample `exp(-αf)` by running:
 ```julia
