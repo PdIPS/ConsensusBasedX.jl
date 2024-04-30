@@ -2,7 +2,7 @@
 
 Consensus-based optimisation (CBO) is an approach to solve the *global minimisation problem*:
 !!! note "Global minimisation problem"
-    Given a (continuous) *objective function* ``f(x)=\mathbb{R}^D \rightarrow \mathbb{R}``, find
+    Given a (continuous) *objective function* ``f(x):\mathbb{R}^D \rightarrow \mathbb{R}``, find
     ```math
     x^* = \operatorname*{argmin}_{x\in\mathbb{R}^D} f(x);
     ```
