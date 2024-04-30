@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: "[BUG]"
+title: "[BUG] Title of your bug"
 labels: bug
 assignees: rafaelbailo
 
@@ -10,7 +10,7 @@ assignees: rafaelbailo
 **Describe the bug**
 A clear and concise description of what the bug is.
 
-**To Reproduce**
+**To reproduce**
 Steps to reproduce the behaviour. If applicable, please include a code example to reproduce the bug.
 
 **Expected behaviour**
