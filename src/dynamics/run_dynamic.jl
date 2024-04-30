@@ -53,15 +53,6 @@ function initialise_dynamic!(
   return nothing
 end
 
-function initialise_method!(
-  method::CBXMethod,
-  method_cache::CBXMethodCache,
-  particle_dynamic::ParticleDynamic,
-  particle_dynamic_cache::ParticleDynamicCache,
-)
-  return nothing
-end
-
 function compute_dynamic!(
   particle_dynamic::ParticleDynamic,
   particle_dynamic_cache::ParticleDynamicCache{<:Modes, <:Parallelisations},
@@ -137,32 +128,12 @@ function prepare_method_step!(
   return nothing
 end
 
-function compute_method_step!(
-  method::CBXMethod,
-  method_cache::CBXMethodCache,
-  particle_dynamic::ParticleDynamic,
-  particle_dynamic_cache::ParticleDynamicCache,
-  m::Int,
-)
-  return nothing
-end
-
 function update_dynamic!(
   particle_dynamic::ParticleDynamic,
   particle_dynamic_cache::ParticleDynamicCache,
   m::Int,
 )
   deep_add!(particle_dynamic_cache.X[m], particle_dynamic_cache.dX[m])
-  return nothing
-end
-
-function finalise_method_step!(
-  method::CBXMethod,
-  method_cache::CBXMethodCache,
-  particle_dynamic::ParticleDynamic,
-  particle_dynamic_cache::ParticleDynamicCache,
-  m::Int,
-)
   return nothing
 end
 
@@ -197,25 +168,6 @@ function wrap_output(
     X₀,
     particle_dynamic.method,
     particle_dynamic_cache.method_cache,
-    particle_dynamic,
-    particle_dynamic_cache,
-  )
-end
-
-function wrap_output(
-  X₀::AbstractArray,
-  method::CBXMethod,
-  method_cache::CBXMethodCache,
-  particle_dynamic::ParticleDynamic,
-  particle_dynamic_cache::ParticleDynamicCache,
-)
-  initial_particles = X₀
-  final_particles = particle_dynamic_cache.X
-  return (;
-    initial_particles,
-    final_particles,
-    method,
-    method_cache,
     particle_dynamic,
     particle_dynamic_cache,
   )
