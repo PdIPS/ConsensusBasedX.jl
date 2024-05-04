@@ -10,7 +10,7 @@ If no options are provided, ConsensusBasedX.jl initialises its particles by samp
 
 ## Initial guess
 
-If you have an initial guess for the global minimiser of the function `f`, you can pass the option `initial_guess` (or `initial_mean`). This can be a `Real`, if you want to use the same value for each coordinate of the initial guess, or an `AbstractVector` of size `size(initial_guess) = (D,)`. The particles will be initisalised by sampling a normal distribution with mean `initial_guess`/`initial_mean` and unit variance. [Full-code example](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/basic_usage/initial_guess.jl).
+If you have an initial guess for the global minimiser of the function `f`, you can pass the option `initial_guess` (or `initial_mean`). This can be a `Real`, if you want to use the same value for each coordinate of the initial guess, or an `AbstractVector` of size `size(initial_guess) = (D,)`. The particles will be initialised by sampling a normal distribution with mean `initial_guess`/`initial_mean` and unit variance. [Full-code example](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/basic_usage/initial_guess.jl).
 
 
 ### Specify a normal distribution
