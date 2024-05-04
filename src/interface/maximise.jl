@@ -4,7 +4,7 @@ maximise(f; keywords...)
 ```
 
 ```julia
-maximise(config::NamedTuple, f)
+maximise(f, config::NamedTuple)
 ```
 
 Maximise the function `f` using Consensus-Based Optimisation.

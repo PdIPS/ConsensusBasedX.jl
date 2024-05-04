@@ -2,7 +2,7 @@
 
 ConsensusBasedX.jl also provides [Consensus-Based Sampling](@ref).
 
-The package exports `sample`, which behaves exactly as `minimise` in [Function minimisation](@ref). It assumes you have defined a function `f(x::AbstractVector)` that takes a single vector argumemt `x` of length `D = length(x)`.
+The package exports `sample`, which behaves exactly as `minimise` in [Function minimisation](@ref). It assumes you have defined a function `f(x::AbstractVector)` that takes a single vector argument `x` of length `D = length(x)`.
 
 For instance, if `D = 2`, you can sample `exp(-αf)` by running:
 ```julia
