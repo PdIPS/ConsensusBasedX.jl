@@ -9,7 +9,7 @@ minimise(f, config::NamedTuple)
 
 Minimise the function `f` using Consensus-Based Optimisation (see [Function minimisation](@ref)).
 
-You must specify the dimension `D` of the problem. Other paramters (e.g. the number of particles `N` or the number of ensembles `M` can also be specified; see [Summary of options](@ref).
+You must specify the dimension `D` of the problem. Other parameters (e.g. the number of particles `N` or the number of ensembles `M` can also be specified; see [Summary of options](@ref).
 
 `minimize`, `optimise`, or `optimize` are aliases for `minimise`.
 
