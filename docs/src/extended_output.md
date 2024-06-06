@@ -11,5 +11,3 @@ The extended output is a `NamedTuple` which contains:
 - `method_cache`, by default a `ConsensusBasedOptimisationCache` object;
 - `particle_dynamic`, by default a `ParticleDynamic` object;
 - `particle_dynamic_cache`, by default a `ParticleDynamicCache` object.
-
-TODO: ref objects.

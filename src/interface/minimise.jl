@@ -11,7 +11,7 @@ Minimise the function `f` using Consensus-Based Optimisation (see [Function mini
 
 You must specify the dimension `D` of the problem. Other parameters (e.g. the number of particles `N` or the number of ensembles `M`) can also be specified; see [Summary of options](@ref).
 
-`minimize`, `optimise`, or `optimize` are aliases for `minimise`.
+`optimise` is an alias for `minimise`.
 
 # Examples
 
@@ -64,6 +64,3 @@ end
   particle_dynamic = construct_particle_dynamic(config, method)
   return particle_dynamic
 end
-
-const minimize = minimise
-export minimize

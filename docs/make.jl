@@ -1,10 +1,52 @@
-# using Pkg;
-# Pkg.activate(".");
-
 push!(LOAD_PATH, "../src/")
 
 using ConsensusBasedX
 using Documenter
+
+extension(s) = split(s, ".")[end]
+is_md(s) = extension(s) == "md"
+
+const SRC_DIR = joinpath(@__DIR__, "src")
+const PARSED_DIR = joinpath(@__DIR__, "parsed")
+const EXAMPLE_DIR = joinpath(@__DIR__, "../examples")
+
+rm(PARSED_DIR, force = true, recursive = true)
+mkdir(PARSED_DIR)
+
+function parse(source, target)
+  touch(target)
+  open(target, "w") do file
+    for line ∈ readlines(source)
+      if first(line, 2) == "{{" && last(line, 2) == "}}"
+        example_name = line[3:(end - 2)]
+        example = joinpath(EXAMPLE_DIR, example_name)
+
+        println(file, "!!! details \"Full example\"")
+        println(file, "\t```julia")
+        for src_line ∈ readlines(example)
+          print(file, "\t")
+          println(file, src_line)
+        end
+        println(file, "\t```")
+      else
+        println(file, line)
+      end
+    end
+  end
+  return nothing
+end
+
+for (root, dirs, files) ∈ walkdir(SRC_DIR)
+  for file ∈ files
+    if is_md(file)
+      source = joinpath(root, file)
+      target = replace(source, SRC_DIR => PARSED_DIR)
+      mkpath(dirname(target))
+      # cp(source, target)
+      parse(source, target)
+    end
+  end
+end
 
 DocMeta.setdocmeta!(
   ConsensusBasedX,
@@ -26,6 +68,7 @@ makedocs(;
     assets = String[],
     footer = "Copyright © 2024 [Dr Rafael Bailo](https://rafaelbailo.com/) and [Purpose-Driven Interacting Particle Systems Group](https://github.com/PdIPS). [MIT License](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/LICENSE).",
   ),
+  source = "parsed",
   pages = [
     "Home" => "index.md",
     "Mathematical background" => [

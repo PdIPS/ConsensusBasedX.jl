@@ -6,10 +6,11 @@ For instance, if `D = 2`, you can minimise `f` by running:
 ```julia
 minimise(f, D = 2)
 ```
-[Full-code example](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/basic_usage/minimise_with_keywords.jl).
 
 !!! note
     You must always provide `D`.
+
+{{basic_usage/minimise_with_keywords.jl}}
 
 
 ## Using a `config` object
@@ -19,20 +20,22 @@ For more advanced usage, you will select several options. You can pass these as 
 config = (; D = 2)
 minimise(f, config)
 ```
-[Full-code example](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/basic_usage/minimise_with_config.jl).
 
 !!! note
     If you pass a `Dict` instead, it will be converted to a `NamedTuple` automatically.
 
+This is a version of the full-code example above, using `config` instead:
+{{basic_usage/minimise_with_config.jl}}
+
 
 ## Aliases
 
-ConsensusBasedX.jl also defines `minimize`, `optimise`, and `optimize`. These are all aliases of `minimise`.
+ConsensusBasedX.jl also defines `optimise` as an alias of `minimise`.
 
 
 ## Maximisation
 
-ConsensusBasedX.jl also defines `maximise` (and its alias, `maximize`) for convenience. If you call
+ConsensusBasedX.jl also defines `maximise` for convenience. If you call
 ```julia
 maximise(f, D = 2)
 ```
@@ -43,8 +46,10 @@ maximise(f, config)
 ```
 `maximise` will attempt to define `g(x) = -f(x)` and call `minimise(g, config)`.
 
-
-Full-code examples are provided for the [keyword](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/basic_usage/maximise_with_keywords.jl) and [config](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/basic_usage/maximise_with_config.jl) approaches.
+These are full-code examples using keywords
+{{basic_usage/maximise_with_keywords.jl}}
+or using `config`
+{{basic_usage/maximise_with_config.jl}}
 
 
 ## Method reference
