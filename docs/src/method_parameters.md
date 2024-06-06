@@ -36,4 +36,4 @@ Consensus-based optimisation requires three parameters:
 !!! tip
     A low value of `σ` and a high value of `λ` make the particles converge towards the consensus point more directly; this is a good idea if you have a very good guess for the global minimiser (see [Particle initialisation](@ref)). A high value of `σ` and a low value of `λ` make the particles explore more of the landscape before converging, which is useful if your initial guess is bad. Similarly, a higher value of `α` biases the consensus point towards the current best particle, which is only desirable if your initial guess is good.
 
-[Full-code example](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/basic_usage/method_parameters.jl).
+{{basic_usage/method_parameters.jl}}

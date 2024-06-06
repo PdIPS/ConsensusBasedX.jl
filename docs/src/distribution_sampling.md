@@ -9,10 +9,11 @@ For instance, if `D = 2`, you can sample `exp(-αf)` by running:
 out = sample(f, D = 2, extended_output=true)
 out.sample
 ```
-[Full-code example](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/basic_usage/sample_with_keywords.jl).
 
 !!! note
     You must always provide `D`.
+
+{{basic_usage/sample_with_keywords.jl}}
 
 
 ## Using a `config` object
@@ -23,10 +24,11 @@ config = (; D = 2, extended_output=true)
 out = sample(f, config)
 out.sample
 ```
-[Full-code example](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/basic_usage/sample_with_config.jl).
 
 !!! note
     If you pass a `Dict` instead, it will be converted to a `NamedTuple` automatically.
+
+{{basic_usage/sample_with_config.jl}}
 
 
 ## Running on minimisation mode

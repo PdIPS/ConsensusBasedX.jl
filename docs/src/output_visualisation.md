@@ -8,4 +8,8 @@ out = minimise(f, D = 2, extended_output = true)
 using ConsensusBasedXPlots
 plot_CBO(out)
 ```
-Full-code examples in [one dimension](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/advanced_usage/output_visualisation_1D.jl) and [two dimensions](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/examples/advanced_usage/output_visualisation_2D.jl).
+
+Examples in one dimension
+{{advanced_usage/output_visualisation_1D.jl}}
+and in two dimensions
+{{advanced_usage/output_visualisation_2D.jl}}
