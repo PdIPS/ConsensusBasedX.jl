@@ -26,7 +26,7 @@ using ConsensusBasedX
 
 ## Basic minimisation
 
-The main functionality of ConsensusBasedX.jl is function minimisation via CBO. It assumes you have defined a function `f(x::AbstractVector)` that takes a single vector argumemt `x` of length `D = length(x)`.
+The main functionality of ConsensusBasedX.jl is function minimisation via CBO. It assumes you have defined a function `f(x::AbstractVector)` that takes a single vector argument `x` of length `D = length(x)`.
 
 For instance, if `D = 2`, you can minimise `f` by running:
 ```julia
