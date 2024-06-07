@@ -65,7 +65,7 @@ makedocs(;
     prettyurls = get(ENV, "CI", "false") == "true",
     canonical = "https://PdIPS.github.io/ConsensusBasedX.jl",
     edit_link = "main",
-    assets = String[],
+    assets = ["assets/favicon.ico"],
     footer = "Copyright © 2024 [Dr Rafael Bailo](https://rafaelbailo.com/) and [Purpose-Driven Interacting Particle Systems Group](https://github.com/PdIPS). [MIT License](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/LICENSE).",
   ),
   source = "parsed",

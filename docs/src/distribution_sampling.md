@@ -9,6 +9,7 @@ For instance, if `D = 2`, you can sample `exp(-αf)` by running:
 out = sample(f, D = 2, extended_output=true)
 out.sample
 ```
+The method must be run with the `extended_output=true` option in order to receive [Extended output](@ref) and access the full particle sample; without it, `sample` returns a single `Vector{Float64}` of length `D` which contains the candidate to the global minimiser of `f`, just like `minimise`.
 
 !!! note
     You must always provide `D`.

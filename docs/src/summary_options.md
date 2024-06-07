@@ -29,7 +29,7 @@ See [Stopping criteria](@ref).
 - `energy_tolerance::Real = 1e-8` is the stopping tolerance for the value of `f`.
 - `max_evaluations::Real = Inf` is the maximum number of evaluations of `f`.
 - `max_iterations::Real = 1000` is the maximum number of iterations.
-- `max_time::Real = Inf` is the maximal simulation time.
+- `max_time::Real = Inf` is the maximal  solution time (the corresponding SDE is solved from time `0` until time `max_time`).
 
 ## Advanced options
 
