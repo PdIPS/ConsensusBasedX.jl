@@ -6,7 +6,7 @@ For instance, if `D = 2`, you can minimise `f` by running:
 ```julia
 minimise(f, D = 2)
 ```
-By default, `minimise` returns a `Vector{Float64}` of length `D`.
+By default, `minimise` returns a `Vector{Float64}` of length `D` which contains the candidate to the global minimiser of `f`.
 
 !!! note
     You must always provide `D`.
@@ -32,6 +32,16 @@ This is a version of the full-code example above, using `config` instead:
 ## Aliases
 
 ConsensusBasedX.jl also defines `optimise` as an alias of `minimise`.
+
+
+## Receiving extended output
+
+It is possible to receive extended output from `minimise` by passing the option `extended_output = true`:
+```julia
+config = (; D = 2, extended_output = true)
+minimise(f, config)
+```
+For more details, see [Extended output](@ref).
 
 
 ## Maximisation

@@ -4,6 +4,9 @@ ConsensusBasedX.jl has been developed with performance in mind. As such, it foll
 
 In order to maintain good performance, it's important that your function `f` also follows these patterns. We recommend the [performance tips](https://docs.julialang.org/en/v1/manual/performance-tips/) section of the Julia documentation. You should benchmark `f`, paying attention to memory allocations.
 
+!!! tip
+    You should use the [BenchmarkTools.jl](https://juliaci.github.io/BenchmarkTools.jl/stable/) package to benchmark `f`.
+
 Once you have benchmarked `f`, you might want to test its performance within ConsensusBasedX.jl. You could run
 ```julia
 config = (; D = 2)

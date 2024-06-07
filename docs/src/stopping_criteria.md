@@ -33,6 +33,6 @@ You can apply any of these criteria by passing them as keywords to the `minimise
 
 ## Max time
 
-`max_time::Real = Inf` determines the maximal simulation time. If the number of iterations times `Δt` surpasses this value, the minimisation stops. 
+`max_time::Real = Inf` determines the maximal solution time (the corresponding SDE is solved from time `0` until time `max_time`). If the number of iterations times `Δt` surpasses this value, the minimisation stops. 
 
 {{basic_usage/max_time.jl}}
