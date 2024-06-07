@@ -11,8 +11,6 @@ Minimise the function `f` using Consensus-Based Optimisation (see [Function mini
 
 You must specify the dimension `D` of the problem. Other parameters (e.g. the number of particles `N` or the number of ensembles `M`) can also be specified; see [Summary of options](@ref).
 
-`optimise` is an alias for `minimise`.
-
 # Examples
 
 ```julia
