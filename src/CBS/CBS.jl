@@ -29,8 +29,7 @@ end
 
   if Symbol(CBS_mode) == :sampling
     λ = 1 / (1 + α)
-  elseif Symbol(CBS_mode) in
-         [:minimise, :minimisation, :optimise, :optimisation]
+  elseif Symbol(CBS_mode) in [:minimise, :minimisation]
     λ = 1
   else
     explanation = "`CBS_mode` should be either `:sampling` or `:minimise`."

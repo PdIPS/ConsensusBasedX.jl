@@ -29,11 +29,6 @@ This is a version of the full-code example above, using `config` instead:
 {{basic_usage/minimise_with_config.jl}}
 
 
-## Aliases
-
-ConsensusBasedX.jl also defines `optimise` as an alias of `minimise`.
-
-
 ## Receiving extended output
 
 It is possible to receive extended output from `minimise` by passing the option `extended_output = true`:

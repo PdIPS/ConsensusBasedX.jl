@@ -21,7 +21,6 @@ include("./interface/config.jl")
 include("./interface/initialise_particles.jl")
 include("./interface/maximise.jl")
 include("./interface/minimise.jl")
-include("./interface/optimise.jl")
 include("./interface/parse_config.jl")
 include("./interface/sample.jl")
 
