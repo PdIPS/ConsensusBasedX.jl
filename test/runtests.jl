@@ -6,6 +6,8 @@ using SafeTestsets, Test
   for test ∈ [
     "CBO/corrections",
     "CBO/is_method_pending",
+    "CBO/output",
+    "CBS/output",
     "dynamics/is_dynamic_pending",
     "interface/initialise_particles",
     "interface/maximise",
