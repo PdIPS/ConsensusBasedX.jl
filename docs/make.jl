@@ -38,12 +38,13 @@ end
 
 for (root, dirs, files) ∈ walkdir(SRC_DIR)
   for file ∈ files
+    source = joinpath(root, file)
+    target = replace(source, SRC_DIR => PARSED_DIR)
+    mkpath(dirname(target))
     if is_md(file)
-      source = joinpath(root, file)
-      target = replace(source, SRC_DIR => PARSED_DIR)
-      mkpath(dirname(target))
-      # cp(source, target)
       parse(source, target)
+    else
+      cp(source, target)
     end
   end
 end
