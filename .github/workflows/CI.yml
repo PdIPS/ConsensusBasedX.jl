@@ -64,6 +64,6 @@ jobs:
       - run: |
           julia --project=docs -e '
             using Documenter: DocMeta, doctest
-            using DefaultKeywordArguments
-            DocMeta.setdocmeta!(DefaultKeywordArguments, :DocTestSetup, :(using DefaultKeywordArguments); recursive=true)
-            doctest(DefaultKeywordArguments)'
+            using ConsensusBasedX
+            DocMeta.setdocmeta!(ConsensusBasedX, :DocTestSetup, :(using ConsensusBasedX); recursive=true)
+            doctest(ConsensusBasedX)'
