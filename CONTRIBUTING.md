@@ -20,7 +20,7 @@ ConsensusBasedX.jl employs unit tests to ensure code quality. Please make sure t
 using Pkg; Pkg.test()
 ```
 
-**To run the tests on Github**: you will have to enable [GitHub workflows](https://github.com/PdIPS/CBXpy/blob/main/.github/workflows/Tests.yml) on your fork. Workflows are turned off by default in forks for security reasons. Unit tests are run as part of the *CI* (continuous integration) [GitHub action](https://docs.github.com/en/actions).
+**To run the tests on Github**: you will have to enable [GitHub workflows](https://github.com/PdIPS/ConsensusBasedX.jl/blob/main/.github/workflows/CI.yml) on your fork. Workflows are turned off by default in forks for security reasons. Unit tests are run as part of the *CI* (continuous integration) [GitHub action](https://docs.github.com/en/actions).
 
 ### Feature requests and bug reports
 
