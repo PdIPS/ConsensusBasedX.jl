@@ -63,7 +63,8 @@ makedocs(;
   sitename = "ConsensusBasedX.jl",
   format = Documenter.HTML(;
     sidebar_sitename = false,
-    prettyurls = get(ENV, "CI", "false") == "true",
+    prettyurls = true,
+    repolink = "https://github.com/PdIPS/ConsensusBasedX.jl",
     canonical = "https://PdIPS.github.io/ConsensusBasedX.jl",
     edit_link = "main",
     assets = ["assets/favicon.ico"],
